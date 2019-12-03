@@ -1,4 +1,3 @@
-
 /**Bismillahir Rahmanir Rahim.**/
 #include<bits/stdc++.h>
 using namespace std;
@@ -133,28 +132,38 @@ double distance(Point a , Point b) {
 /// ************************************** Code starts here ****************************************** */
 string s,s1;
 ll n,m,a,b,i,j,d,t,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-void solve(ll n)
-{
-    ll sum =0  ;
-    for(i=2;i<=sqrt(n);i++)
-    {
-        j = n/i;
-        sum += (modMul(j,j+1)-modMul(i,i-1))*.5;
-        sum %=MOD;
-        sum += modMul(j-i,i);
-        sum %=MOD;
-    }
-    sum += modMul(n,n+1)*.5;
-    sum %=MOD;
-    sum += (n-1);
-    if(sum<0)
-        sum+=MOD;
-    cout<< sum%MOD << endl;
-}
+
+typedef tuple<int, int> ii;
+typedef set<ii> st;
 int main()
 {
-       cin >> n ;
-       solve(n);
+
+cin >> n >> m ;
+st s{make_tuple(n,n)};
+st t{make_tuple(n,n)};
+
+while(m--)
+{
+    int x ;
+    cin >> x ;
+    auto i = s.lower_bound(make_tuple(x,0));
+    tie(a,b) = *i ;
+
+ s.erase(i);
+ s.insert(make_tuple(x,b-(a-x)));
+ // D(b-(a-x));
+ s.insert(make_tuple(a,a-x));
+// D(a-x);
+
+ t.erase(make_tuple(b,a));
+ t.insert(make_tuple(b-(a-x),x));
+ t.insert(make_tuple(a-x,a));
+
+ cout << get<0>(*t.rbegin());
+ if(m>0)cout <<' ';
 }
+cout << ln ;
+
+
+}
+

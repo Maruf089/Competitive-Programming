@@ -1,4 +1,3 @@
-
 /**Bismillahir Rahmanir Rahim.**/
 #include<bits/stdc++.h>
 using namespace std;
@@ -30,14 +29,7 @@ using namespace std;
 typedef pair<int,int> pii;
 typedef pair<double, double> pdd;
 typedef pair<ll, ll> pll;
-#define vi vector <int>
-#define vll vector <ll>
-#define vs vector <string>
-#define pb push_back
-#define eb emplace_back
-#define mpii map <int,int>
-#define mpsi map <string,int>
-#define mpll map <long long,long long>
+
 #define MP make_pair
 #define F first
 #define S second
@@ -68,31 +60,91 @@ using ordered_map = tree<F, S, less<F>, rb_tree_tag, tree_order_statistics_node_
 
 ///Inline functions
 
-inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
-inline bool isLeapYear(ll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
-inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
-inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
-inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
-inline ll modSub(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); a -= b; normal(a); return a; }
-inline ll modPow(ll b, ll p) { ll r = 1; while(p) { if(p&1) r = modMul(r, b); b = modMul(b, b); p >>= 1; } return r; }
-inline ll modInverse(ll a) { return modPow(a, MOD-2); }
-inline ll modDiv(ll a, ll b) { return modMul(a, modInverse(b)); }
-inline bool isInside(pii p,ll n,ll m){ return (p.first>=0&&p.first<n&&p.second>=0&&p.second<m); }
-inline bool isInside(pii p,ll n){ return (p.first>=0&&p.first<n&&p.second>=0&&p.second<n); }
-inline bool isSquare(ll x){ ll s = sqrt(x);    return (s*s==x); }
-inline bool isFib(ll x) { return isSquare(5*x*x+4)|| isSquare(5*x*x-4); }
-inline bool isPowerOfTwo(ll x){ return ((1LL<<(ll)log2(x))==x); }
+inline bool EQ(double a, double b)
+{
+    return fabs(a-b) < 1e-9;
+}
+inline bool isLeapYear(ll year)
+{
+    return (year%400==0) | (year%4==0 && year%100!=0);
+}
+inline void normal(ll &a)
+{
+    a %= MOD;
+    (a < 0) && (a += MOD);
+}
+inline ll modMul(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    return (a*b)%MOD;
+}
+inline ll modAdd(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    return (a+b)%MOD;
+}
+inline ll modSub(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    a -= b;
+    normal(a);
+    return a;
+}
+inline ll modPow(ll b, ll p)
+{
+    ll r = 1;
+    while(p)
+    {
+        if(p&1)
+            r = modMul(r, b);
+        b = modMul(b, b);
+        p >>= 1;
+    }
+    return r;
+}
+inline ll modInverse(ll a)
+{
+    return modPow(a, MOD-2);
+}
+inline ll modDiv(ll a, ll b)
+{
+    return modMul(a, modInverse(b));
+}
+inline bool isInside(pii p,ll n,ll m)
+{
+    return (p.first>=0&&p.first<n&&p.second>=0&&p.second<m);
+}
+inline bool isInside(pii p,ll n)
+{
+    return (p.first>=0&&p.first<n&&p.second>=0&&p.second<n);
+}
+inline bool isSquare(ll x)
+{
+    ll s = sqrt(x);
+    return (s*s==x);
+}
+inline bool isFib(ll x)
+{
+    return isSquare(5*x*x+4)|| isSquare(5*x*x-4);
+}
+inline bool isPowerOfTwo(ll x)
+{
+    return ((1LL<<(ll)log2(x))==x);
+}
 
 
 struct func
 {
 //this is a sample overloading function for sorting stl
-bool operator()(pii const &a, pii const &b)
-{
-if(a.F==b.F)
-return (a.S<b.S);
-return (a.F<b.F);
-}
+    bool operator()(pii const &a, pii const &b)
+    {
+        if(a.F==b.F)
+            return (a.S<b.S);
+        return (a.F<b.F);
+    }
 };
 
 const ll INF = 0x3f3f3f3f3f3f3f3f;
@@ -116,45 +168,72 @@ const int mx = (int)1e5+9;
 /// inline ll setBit(ll n, int i) { return n|(1LL<<i); }
 /// inline ll resetBit(ll n, int i) { return n&(~(1LL<<i)); }
 
-struct Point{
+struct Point
+{
     ll s,p,x,y;
     string name;
-   /// Point() {}
-  ///  Point(double x,double y) : x(x), y(y) {}
-bool operator < (const Point &ob)const /// decreasing sort as same as compare function
+    /// Point() {}
+    ///  Point(double x,double y) : x(x), y(y) {}
+    bool operator < (const Point &ob)const /// decreasing sort as same as compare function
     {
         return s==ob.s ? p<ob.p : s>ob.s;
     }
 };
 
-double distance(Point a , Point b) {
+double distance(Point a, Point b)
+{
     return sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
 }
 /// ************************************** Code starts here ****************************************** */
 string s,s1;
 ll n,m,a,b,i,j,d,t,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-void solve(ll n)
-{
-    ll sum =0  ;
-    for(i=2;i<=sqrt(n);i++)
-    {
-        j = n/i;
-        sum += (modMul(j,j+1)-modMul(i,i-1))*.5;
-        sum %=MOD;
-        sum += modMul(j-i,i);
-        sum %=MOD;
-    }
-    sum += modMul(n,n+1)*.5;
-    sum %=MOD;
-    sum += (n-1);
-    if(sum<0)
-        sum+=MOD;
-    cout<< sum%MOD << endl;
-}
+
+using namespace std;
+
+typedef vector<int> vi;
+typedef tuple<int, int> ii;
+typedef multimap<ii, int> miii;
+typedef priority_queue<ii, vector<ii>, greater<ii>> pq;
+
 int main()
 {
-       cin >> n ;
-       solve(n);
+    int n, k = 0;
+    cin >> n;
+    miii m;
+    for (int i = 0; i < n; i++)
+    {
+        int a, b;
+        cin >> a >> b;
+        m.insert(make_pair(make_tuple(a, b), i));
+    }
+    pq q;
+    vi v(n);
+    for (auto it = m.begin(); it != m.end(); it++)
+    {
+        int a, b, c;
+        tie(a, b) = it->first;
+   // D2(a,b);
+        if (q.empty() || get<0>(q.top()) >= a)
+        {
+
+            c = ++k;
+        }
+        else
+        {
+
+            c = get<1>(q.top());
+   //     D(c);
+            q.pop();
+        }
+        q.push(make_tuple(b, c));
+        v[it->second] = c;
+    }
+    cout << k << endl;
+    for (int i = 0; i < n; i++)
+    {
+        cout << v[i];
+        if (i < n - 1)
+            cout << " ";
+    }
+    cout << endl;
 }
