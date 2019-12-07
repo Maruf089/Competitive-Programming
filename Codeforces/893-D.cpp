@@ -194,209 +194,49 @@ double distance(Point a, Point b)
 }
 /// ************************************** Code starts here ****************************************** */
 string s,s1;
-ll n,m,a,b,i,j,d,t,pos,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
+ll n,m,a,b,i,j,d,t,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
 vector<ll>vc;
 map<ll,ll>mp;
 
 int main()
 {
 
-    cin >> a >> b >> cs >> d ;
-    int aa =a,bb=b,cc=cs,dd=d;
-    k = a+b+cs+d;
-    ll arr[k+9],brr[k+9];
-    MEM(arr,-1);
-
-    for(int i=1; i<=k; i+=2) /// put 0 in odd position
+    cin >> n >> d ;
+    ll avaiable=0;
+    f0(i,n)
     {
-        if(a)
+        cin >> a ;
+        if(a==0)
         {
-            arr[i] = 0 ;
-            a--;
-        }
-        else break;
-    }
-
-    for(int i=2; i<=k; i+=2) /// put 1 in odd position
-    {
-        if(b)
-        {
-            arr[i] = 1 ;
-            b--;
-        }
-        else break;
-    }
-
-
-
-    for(int i=1; i<=k; i++)
-        if(arr[i]==-1)
-        {
-            pos = i ;
-            break;
-        }
-
-    for(int j=pos; j<=k; j+=2) /// after that put 2 after skipping a position
-    {
-        if(cs)
-        {
-            arr[j] = 2 ;
-            cs--;
+          if(counT<0)
+          {
+              ll go = min(-counT,avaiable);
+              avaiable -= go ;
+              counT += go ;
+      //  D3(go,avaiable,counT);
+              if(counT<0)
+              {
+                  ++ans;
+                  counT = 0 ;
+                  avaiable = d ;
+              }
+   //     D3(go,avaiable,counT);
+          }
         }
         else
-            break;
+        {
+            counT += a;
+
+            if(counT>d)
+            {
+                return cout << -1,0;
+            }
+            avaiable = min(avaiable,d-counT);
+  //      D2(counT,avaiable);
+        }
     }
 
-//       for(int i=1; i<=k; i++)
-//        cout << arr[i] << " ";
-//    cout << ln ;
-
-
-      for(int i=1; i<=k; i++)
-        if(arr[i]==-1)
-        {
-            pos = i;
-            break;
-        }
-
-
-    for(int j=pos; j<=k; j+=2) /// after that put 3 after skipping a position
-    {
-        if(d)
-        {
-            arr[j] = 3 ;
-            d--;
-        }
-        else
-            break;
-    }
-int flag = 0;
-
-
-    for(i=1; i<=k; i++)
-    {
-        if(abs(arr[i+1]-arr[i])==1 and i<k)
-        {
-           ;
-        }
-        else if(abs(arr[i+1]-arr[i])!=1 and i<k)
-        {
-            flag = 1;
-        }
-        if(arr[i]==-1)
-            flag = 1 ;
-    }
-
-
-
-
-    /// Again same but this time starts from the right and go left
-       MEM(brr,-1);
-
-
-    for(int i=1; i<=k; i+=2)
-    {
-        if(dd)
-        {
-            brr[i] = 3 ;
-            dd--;
-        }
-        else break;
-    }
-
-
-
-    for(int i=2; i<=k; i+=2)
-    {
-        if(cc)
-        {
-            brr[i] = 2 ;
-            cc--;
-        }
-        else break;
-    }
-
-
-
-
-    for(int i=1; i<=k; i++)
-        if(brr[i]==-1)
-        {
-            pos = i ;
-            break;
-        }
-
-    for(int j=pos; j<=k; j+=2)
-    {
-        if(bb)
-        {
-            brr[j] = 1 ;
-            bb--;
-        }
-        else
-            break;
-    }
-
-//       for(int i=1; i<=k; i++)
-//        cout << arr[i] << " ";
-//    cout << ln ;
-
-
-      for(int i=1; i<=k; i++)
-        if(brr[i]==-1)
-        {
-            pos = i;
-            break;
-        }
-
-
-    for(int j=pos; j<=k; j+=2)
-    {
-        if(aa)
-        {
-            brr[j] = 0 ;
-            aa--;
-        }
-        else
-            break;
-    }
-int flaggg = 0;
-
-
-    for(i=1; i<=k; i++)
-    {
-        if(abs(brr[i+1]-brr[i])==1 and i<k)
-        {
-           ;
-        }
-        else if(abs(brr[i+1]-brr[i])!=1 and i<k)
-        {
-            flaggg = 1;
-        }
-         if(brr[i]==-1)
-            flaggg = 1 ;
-    }
-
-
-/// D2(flag,flaggg);
-
-    if(flag and flaggg)
-        cout << "NO" << ln ;
-    else if(flag==0)
-    {
-        cout << "YES" << ln ;
-        f1(i,k)
-        cout << arr[i] << " ";
-        cout << ln ;
-    }
-    else if(flaggg==0)
-    {
-        cout << "YES" << ln ;
-        f1(i,k)
-        cout << brr[i] << " ";
-        cout << ln ;
-    }
-    else cout << "NO" <<ln;
+    cout << ans << ln ;
 
 }
 

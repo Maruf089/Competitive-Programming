@@ -194,209 +194,74 @@ double distance(Point a, Point b)
 }
 /// ************************************** Code starts here ****************************************** */
 string s,s1;
-ll n,m,a,b,i,j,d,t,pos,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
+ll n,m,a,i,j,d,t,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
 
 int main()
 {
-
-    cin >> a >> b >> cs >> d ;
-    int aa =a,bb=b,cc=cs,dd=d;
-    k = a+b+cs+d;
-    ll arr[k+9],brr[k+9];
-    MEM(arr,-1);
-
-    for(int i=1; i<=k; i+=2) /// put 0 in odd position
+    cin >> t ;
+    while(t--)
     {
-        if(a)
+        cin >> n ;
+        set<int>st;
+        map<ll,ll>mp;
+        int g=0,s=0,b=0,chk=n/2;
+        f1(i,n)
         {
-            arr[i] = 0 ;
-            a--;
+            cin >> a ;
+            mp[a]++;
+            st.insert(a);
         }
-        else break;
-    }
-
-    for(int i=2; i<=k; i+=2) /// put 1 in odd position
-    {
-        if(b)
+        set<int>::reverse_iterator rit;
+        int idx = 1 ;
+        int flag = 0 ;
+        for (rit = st.rbegin(); rit != st.rend(); rit++)
         {
-            arr[i] = 1 ;
-            b--;
+            if(idx==1)
+            {
+                g += mp[*rit];
+                idx=2;
+            }
+            else if(idx==2)
+            {
+                if(s<=g)
+                {
+                    s += mp[*rit] ;
+                }
+            }
+            else if(idx==3)
+            {
+                if(b>g)
+                {
+                   flag = 1;
+                }
+                if(b+g+s<n/2)
+                b += mp[*rit];
+
+                int k = mp[*rit] ;
+
+                if(g+b+s>n/2)
+                {
+                    b -= k ;
+                    break;
+                }
+
+            }
+
+
+        if(s>g)idx=3;
+
+      //      D3(mp[*rit],g,s);
+        //    D2(idx,b);
         }
-        else break;
-    }
 
-
-
-    for(int i=1; i<=k; i++)
-        if(arr[i]==-1)
+        if(g+b+s<=n/2 and flag)
         {
-            pos = i ;
-            break;
-        }
-
-    for(int j=pos; j<=k; j+=2) /// after that put 2 after skipping a position
-    {
-        if(cs)
-        {
-            arr[j] = 2 ;
-            cs--;
+            cout << g << " " << s << " "<< b << ln ;
         }
         else
-            break;
+            cout << "0 0 0" << ln ;
     }
 
-//       for(int i=1; i<=k; i++)
-//        cout << arr[i] << " ";
-//    cout << ln ;
-
-
-      for(int i=1; i<=k; i++)
-        if(arr[i]==-1)
-        {
-            pos = i;
-            break;
-        }
-
-
-    for(int j=pos; j<=k; j+=2) /// after that put 3 after skipping a position
-    {
-        if(d)
-        {
-            arr[j] = 3 ;
-            d--;
-        }
-        else
-            break;
-    }
-int flag = 0;
-
-
-    for(i=1; i<=k; i++)
-    {
-        if(abs(arr[i+1]-arr[i])==1 and i<k)
-        {
-           ;
-        }
-        else if(abs(arr[i+1]-arr[i])!=1 and i<k)
-        {
-            flag = 1;
-        }
-        if(arr[i]==-1)
-            flag = 1 ;
-    }
-
-
-
-
-    /// Again same but this time starts from the right and go left
-       MEM(brr,-1);
-
-
-    for(int i=1; i<=k; i+=2)
-    {
-        if(dd)
-        {
-            brr[i] = 3 ;
-            dd--;
-        }
-        else break;
-    }
-
-
-
-    for(int i=2; i<=k; i+=2)
-    {
-        if(cc)
-        {
-            brr[i] = 2 ;
-            cc--;
-        }
-        else break;
-    }
-
-
-
-
-    for(int i=1; i<=k; i++)
-        if(brr[i]==-1)
-        {
-            pos = i ;
-            break;
-        }
-
-    for(int j=pos; j<=k; j+=2)
-    {
-        if(bb)
-        {
-            brr[j] = 1 ;
-            bb--;
-        }
-        else
-            break;
-    }
-
-//       for(int i=1; i<=k; i++)
-//        cout << arr[i] << " ";
-//    cout << ln ;
-
-
-      for(int i=1; i<=k; i++)
-        if(brr[i]==-1)
-        {
-            pos = i;
-            break;
-        }
-
-
-    for(int j=pos; j<=k; j+=2)
-    {
-        if(aa)
-        {
-            brr[j] = 0 ;
-            aa--;
-        }
-        else
-            break;
-    }
-int flaggg = 0;
-
-
-    for(i=1; i<=k; i++)
-    {
-        if(abs(brr[i+1]-brr[i])==1 and i<k)
-        {
-           ;
-        }
-        else if(abs(brr[i+1]-brr[i])!=1 and i<k)
-        {
-            flaggg = 1;
-        }
-         if(brr[i]==-1)
-            flaggg = 1 ;
-    }
-
-
-/// D2(flag,flaggg);
-
-    if(flag and flaggg)
-        cout << "NO" << ln ;
-    else if(flag==0)
-    {
-        cout << "YES" << ln ;
-        f1(i,k)
-        cout << arr[i] << " ";
-        cout << ln ;
-    }
-    else if(flaggg==0)
-    {
-        cout << "YES" << ln ;
-        f1(i,k)
-        cout << brr[i] << " ";
-        cout << ln ;
-    }
-    else cout << "NO" <<ln;
 
 }
 
