@@ -1,9 +1,16 @@
-/**Bismillahir Rahmanir Rahim.**/
-#include<bits/stdc++.h>
+///*بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم*///
+
+//#pragma GCC optimize("Ofast")
+//#pragma GCC target("avx,avx2,fma")
+//#pragma GCC optimization ("unroll-loops")
+
+#include <bits/stdc++.h>
 using namespace std;
 #define ln '\n'
 #define inp(x) scanf("%lld",&x)
 #define inp2(a,b) scanf("%lld %lld",&a,&b)
+#define sf scanf
+#define pf printf
 
 #define f0(i,b) for(int i=0;i<(b);i++)
 #define f1(i,b) for(int i=1;i<=(b);i++)
@@ -23,40 +30,81 @@ typedef pair<ll, ll> pll;
 #define all(v) v.begin(),v.end()
 #define MEM(a, b) memset(a, b, sizeof(a))
 
-#define fast ios_base::sync_with_stdio(false)
-
-/*
-#include <ext/pb_ds/assoc_container.hpp> // Common file
-#include <ext/pb_ds/tree_policy.hpp> // Including */
-
-//using namespace __gnu_pbds;
-/*
-template<typename T>
-using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-template<typename F, typename S>
-using ordered_map = tree<F, S, less<F>, rb_tree_tag, tree_order_statistics_node_update>;
-
-// find_by_order(k) – ফাংশনটি kth ordered element এর একটা পয়েন্টার রিটার্ন করে। অর্থাৎ তুমি চাইলেই kth ইন্ডেক্সে কি আছে, সেটা জেনে ফেলতে পারছো!
-// order_of_key(x) – ফাংশনটি x এলিমࡆɠǍটটޠকোন পজিশনে আছে সেটা বলে দেয়।
-
-*/
+#define fastio ios_base::sync_with_stdio(false)
 
 ///Inline functions
 
-inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
-inline bool isLeapYear(ll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
-inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
-inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
-inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
-inline ll modSub(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); a -= b; normal(a); return a; }
-inline ll modPow(ll b, ll p) { ll r = 1; while(p) { if(p&1) r = modMul(r, b); b = modMul(b, b); p >>= 1; } return r; }
-inline ll modInverse(ll a) { return modPow(a, MOD-2); }
-inline ll modDiv(ll a, ll b) { return modMul(a, modInverse(b)); }
-inline bool isInside(pii p,ll n,ll m){ return (p.first>=0&&p.first<n&&p.second>=0&&p.second<m); }
-inline bool isInside(pii p,ll n){ return (p.first>=0&&p.first<n&&p.second>=0&&p.second<n); }
-inline bool isSquare(ll x){ ll s = sqrt(x);    return (s*s==x); }
-inline bool isFib(ll x) { return isSquare(5*x*x+4)|| isSquare(5*x*x-4); }
-inline bool isPowerOfTwo(ll x){ return ((1LL<<(ll)log2(x))==x); }
+inline bool EQ(double a, double b)
+{
+    return fabs(a-b) < 1e-9;
+}
+//inline bool isLeapYearll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
+inline void normal(ll &a)
+{
+    a %= MOD;
+    (a < 0) && (a += MOD);
+}
+inline ll modMul(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    return (a*b)%MOD;
+}
+inline ll modAdd(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    return (a+b)%MOD;
+}
+inline ll modSub(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    a -= b;
+    normal(a);
+    return a;
+}
+inline ll modPow(ll b, ll p)
+{
+    ll r = 1;
+    while(p)
+    {
+        if(p&1)
+            r = modMul(r, b);
+        b = modMul(b, b);
+        p >>= 1;
+    }
+    return r;
+}
+inline ll modInverse(ll a)
+{
+    return modPow(a, MOD-2);
+}
+inline ll modDiv(ll a, ll b)
+{
+    return modMul(a, modInverse(b));
+}
+inline bool isInside(pii p,ll n,ll m)
+{
+    return (p.first>=0&&p.first<n&&p.second>=0&&p.second<m);
+}
+inline bool isInside(pii p,ll n)
+{
+    return (p.first>=0&&p.first<n&&p.second>=0&&p.second<n);
+}
+inline bool isSquare(ll x)
+{
+    ll s = sqrt(x);
+    return (s*s==x);
+}
+inline bool isFib(ll x)
+{
+    return isSquare(5*x*x+4)|| isSquare(5*x*x-4);
+}
+inline bool isPowerOfTwo(ll x)
+{
+    return ((1LL<<(ll)log2(x))==x);
+}
 
 
 /// DEBUG --------------------------------------------------------------------------------->>>>>>
@@ -169,70 +217,56 @@ const long double EPS = 1e-9;
 const int inf = 0x3f3f3f3f;
 const int mx = (int)1e5+9;
 
-ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc[mx];
+ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
+vector<ll>vc;
 map<ll,ll>mp;
 
-int level[mx];
-int dp[mx];
-bool bridge;
-vector<pll>ans;
-
-void dfs(int vertex , int parent)
-{
-    level[vertex] = level[parent] + 1 ;
-    for(auto next : vc[vertex])
-    {
-        if( level[next] != 0 )
-        {
-            if( next == parent )
-                continue;
-
-            if( level[next] < level[vertex] )
-                {
-                    dp[vertex]++;
-                }
-            else if( level[next] > level[vertex] )
-            {
-                dp[vertex]--;
-                ans.pb( {next,vertex} );
-            }
-
-        }
-        else
-        {
-           dfs( next , vertex );
-           ans.pb( {vertex , next } );
-           dp[vertex] += dp[next] ;
-        }
-    }
-    if(dp[vertex] == 0  and vertex != parent )
-        bridge = true ;
-}
 int main()
 {
-   fast ;
-  //  freopen("in.txt","r",stdin);
+    //  freopen("in.txt","r",stdin);
+    fastio;
 
-  cin >> n >> m ;
-  f0(i,m)
-  {
-      cin >> a >> b ;
-      vc[a].pb(b);
-      vc[b].pb(a);
-  }
+    t = 1 ;
+    cin >> t ;
+    while(t--)
+    {
 
-  dfs(1,1);
+        cin >> n ;
+        ll arr[n+9] = {0};
+        set<pair<int,int>>st;
+        st.insert({n,-1});
+        counT = 1 ;
+        while(st.sz)
+        {
+            pii pt = *st.rbegin();
+            st.erase(pt);
+            //    dbg(pt.F,pt.S);
 
-  if( bridge )
-  {
-      cout << 0 << endl;
-  }
-  else
-  {
-      for( auto it : ans )
-        cout << it.F << ' ' << it.S << endl;
-  }
+            pt.second *= -1;
 
+            int cd = (pt.first+pt.second-1);
+            int mid = (pt.second+cd)/2;
+            arr[mid] = counT;
+
+            if(mid-pt.second)
+                st.insert({mid-pt.second,-pt.second});
+            if(cd-mid)
+                st.insert({cd-mid,-(mid+1)});
+
+            counT++;
+
+        }
+
+        f1(i,n)
+        cout << arr[i] << ' ';
+        cout << ln ;
+
+    }
+
+
+
+
+
+
+    /// Comment the debugger section
 }
-

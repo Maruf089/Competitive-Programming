@@ -1,16 +1,23 @@
-/**Bismillahir Rahmanir Rahim.**/
-#include<bits/stdc++.h>
+///*بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم*///
+
+//#pragma GCC optimize("Ofast")
+//#pragma GCC target("avx,avx2,fma")
+//#pragma GCC optimization ("unroll-loops")
+
+#include <bits/stdc++.h>
 using namespace std;
 #define ln '\n'
-#define inp(x) scanf("%lld",&x)
-#define inp2(a,b) scanf("%lld %lld",&a,&b)
+#define inp(x) scanf("%d",&x)
+#define inp2(a,b) scanf("%d %d",&a,&b)
+#define sf scanf
+#define pf printf
 
 #define f0(i,b) for(int i=0;i<(b);i++)
 #define f1(i,b) for(int i=1;i<=(b);i++)
 
 #define MOD 1000000007
 #define PI acos(-1)
-#define ll long long int
+#define ll int
 typedef pair<int,int> pii;
 typedef pair<ll, ll> pll;
 #define pb push_back
@@ -23,28 +30,12 @@ typedef pair<ll, ll> pll;
 #define all(v) v.begin(),v.end()
 #define MEM(a, b) memset(a, b, sizeof(a))
 
-#define fast ios_base::sync_with_stdio(false)
-
-/*
-#include <ext/pb_ds/assoc_container.hpp> // Common file
-#include <ext/pb_ds/tree_policy.hpp> // Including */
-
-//using namespace __gnu_pbds;
-/*
-template<typename T>
-using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-template<typename F, typename S>
-using ordered_map = tree<F, S, less<F>, rb_tree_tag, tree_order_statistics_node_update>;
-
-// find_by_order(k) – ফাংশনটি kth ordered element এর একটা পয়েন্টার রিটার্ন করে। অর্থাৎ তুমি চাইলেই kth ইন্ডেক্সে কি আছে, সেটা জেনে ফেলতে পারছো!
-// order_of_key(x) – ফাংশনটি x এলিমࡆɠǍটটޠকোন পজিশনে আছে সেটা বলে দেয়।
-
-*/
+#define fastio ios_base::sync_with_stdio(false)
 
 ///Inline functions
 
 inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
-inline bool isLeapYear(ll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
+//inline bool isLeapYearll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
 inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
 inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
 inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
@@ -168,71 +159,62 @@ const ll INF = 0x3f3f3f3f3f3f3f3f;
 const long double EPS = 1e-9;
 const int inf = 0x3f3f3f3f;
 const int mx = (int)1e5+9;
+const int block = 320;
 
-ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc[mx];
-map<ll,ll>mp;
+ll n,q,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
 
-int level[mx];
-int dp[mx];
-bool bridge;
-vector<pll>ans;
-
-void dfs(int vertex , int parent)
+ll input[mx],togo[mx],jump[mx];
+void update(ll b)
 {
-    level[vertex] = level[parent] + 1 ;
-    for(auto next : vc[vertex])
-    {
-        if( level[next] != 0 )
-        {
-            if( next == parent )
-                continue;
-
-            if( level[next] < level[vertex] )
-                {
-                    dp[vertex]++;
-                }
-            else if( level[next] > level[vertex] )
-            {
-                dp[vertex]--;
-                ans.pb( {next,vertex} );
-            }
-
+    ll lp = b * block, rp = min(n - 1, (b + 1) * block - 1);
+    for(ll i = rp; i >= lp; i--) {
+        if(i + input[i] > rp) {
+            togo[i] = i;
+            jump[i] = 1;
         }
-        else
-        {
-           dfs( next , vertex );
-           ans.pb( {vertex , next } );
-           dp[vertex] += dp[next] ;
+        else {
+            togo[i] = togo[i + input[i]];
+            jump[i] = 1 + jump[i + input[i]];
         }
     }
-    if(dp[vertex] == 0  and vertex != parent )
-        bridge = true ;
+}
+void query(ll pos)
+{
+    ll counT = 0, prev = 0 ;
+    while(pos<n)
+    {
+        counT += jump[pos];
+        prev = togo[pos];
+        pos = prev + input[prev];
+    }
+//dbg(prev+1,counT);
+    pf("%d %d\n",prev+1,counT);
 }
 int main()
 {
-   fast ;
-  //  freopen("in.txt","r",stdin);
+  inp2(n,q);
+  f0(i,n)
+      inp(input[i]);
 
-  cin >> n >> m ;
-  f0(i,m)
-  {
-      cin >> a >> b ;
-      vc[a].pb(b);
-      vc[b].pb(a);
-  }
+  for(j=0;j<=n/block;j++)
+    update(j);
 
-  dfs(1,1);
-
-  if( bridge )
+  while(q--)
   {
-      cout << 0 << endl;
-  }
-  else
-  {
-      for( auto it : ans )
-        cout << it.F << ' ' << it.S << endl;
+      inp(t);
+      if(t==1)
+      {
+          inp(a);
+          a--;
+          query(a);
+      }
+      else
+      {
+         inp2(a,b);
+         a--;
+         input[a]  = b ;
+         update(a/block);
+      }
   }
 
 }
-

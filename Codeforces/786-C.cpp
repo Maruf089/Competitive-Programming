@@ -1,9 +1,16 @@
-/**Bismillahir Rahmanir Rahim.**/
-#include<bits/stdc++.h>
+///*بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم*///
+
+//#pragma GCC optimize("Ofast")
+//#pragma GCC target("avx,avx2,fma")
+//#pragma GCC optimization ("unroll-loops")
+
+#include <bits/stdc++.h>
 using namespace std;
 #define ln '\n'
-#define inp(x) scanf("%lld",&x)
-#define inp2(a,b) scanf("%lld %lld",&a,&b)
+#define inp(x) scanf("%d",&x)
+#define inp2(a,b) scanf("%d %d",&a,&b)
+#define sf scanf
+#define pf printf
 
 #define f0(i,b) for(int i=0;i<(b);i++)
 #define f1(i,b) for(int i=1;i<=(b);i++)
@@ -23,28 +30,12 @@ typedef pair<ll, ll> pll;
 #define all(v) v.begin(),v.end()
 #define MEM(a, b) memset(a, b, sizeof(a))
 
-#define fast ios_base::sync_with_stdio(false)
-
-/*
-#include <ext/pb_ds/assoc_container.hpp> // Common file
-#include <ext/pb_ds/tree_policy.hpp> // Including */
-
-//using namespace __gnu_pbds;
-/*
-template<typename T>
-using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-template<typename F, typename S>
-using ordered_map = tree<F, S, less<F>, rb_tree_tag, tree_order_statistics_node_update>;
-
-// find_by_order(k) – ফাংশনটি kth ordered element এর একটা পয়েন্টার রিটার্ন করে। অর্থাৎ তুমি চাইলেই kth ইন্ডেক্সে কি আছে, সেটা জেনে ফেলতে পারছো!
-// order_of_key(x) – ফাংশনটি x এলিমࡆɠǍটটޠকোন পজিশনে আছে সেটা বলে দেয়।
-
-*/
+#define fastio ios_base::sync_with_stdio(false)
 
 ///Inline functions
 
 inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
-inline bool isLeapYear(ll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
+//inline bool isLeapYearll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
 inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
 inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
 inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
@@ -169,70 +160,59 @@ const long double EPS = 1e-9;
 const int inf = 0x3f3f3f3f;
 const int mx = (int)1e5+9;
 
-ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc[mx];
-map<ll,ll>mp;
+int n,a[mx],vis[mx],ans[mx];
 
-int level[mx];
-int dp[mx];
-bool bridge;
-vector<pll>ans;
-
-void dfs(int vertex , int parent)
+int GetAns(int k)
 {
-    level[vertex] = level[parent] + 1 ;
-    for(auto next : vc[vertex])
+    MEM(vis,-1);
+    int cnt = 0 , ret = 1 ;
+    f1(i,n)
     {
-        if( level[next] != 0 )
+        if(vis[a[i]]==ret)
+            continue;
+        cnt++;
+        if(cnt>k)
         {
-            if( next == parent )
-                continue;
-
-            if( level[next] < level[vertex] )
-                {
-                    dp[vertex]++;
-                }
-            else if( level[next] > level[vertex] )
-            {
-                dp[vertex]--;
-                ans.pb( {next,vertex} );
-            }
-
+            cnt = 1 ;
+            ret++;
         }
-        else
-        {
-           dfs( next , vertex );
-           ans.pb( {vertex , next } );
-           dp[vertex] += dp[next] ;
-        }
+        vis[a[i]] = ret ;
     }
-    if(dp[vertex] == 0  and vertex != parent )
-        bridge = true ;
+    return ret;
+
 }
+void solve(int l,int r)
+{
+    if(l>r)
+        return;
+    int ansl = GetAns(l);
+    int ansr = GetAns(r);
+    if(ansl==ansr)
+    {
+        for(int i=l;i<=r;i++)
+            ans[i] = ansl;
+        return;
+    }
+    ans[l] = ansl , ans[r] = ansr;
+    int mid = (l+r)>>1;
+    solve(l+1,mid);
+    solve(mid+1,r-1);
+
+}
+
 int main()
 {
-   fast ;
-  //  freopen("in.txt","r",stdin);
 
-  cin >> n >> m ;
-  f0(i,m)
-  {
-      cin >> a >> b ;
-      vc[a].pb(b);
-      vc[b].pb(a);
-  }
+    inp(n);
+    f1(i,n)
+     inp(a[i]);
 
-  dfs(1,1);
+     solve(1,n);
 
-  if( bridge )
-  {
-      cout << 0 << endl;
-  }
-  else
-  {
-      for( auto it : ans )
-        cout << it.F << ' ' << it.S << endl;
-  }
+     for(int i=1;i<=n;i++)
+    {
+        printf("%d ",ans[i]);
+    }
 
+  /// Comment the debugger section
 }
-
