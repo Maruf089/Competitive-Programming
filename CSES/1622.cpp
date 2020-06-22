@@ -195,8 +195,8 @@ struct func
 };
 /*------------------------------Graph Moves----------------------------*/
 //Rotation: S -> E -> N -> W
-const int fx[] = {0, +1, 0, -1};
-const int fy[] = {-1, 0, +1, 0};
+//const int fx[] = {0, +1, 0, -1};
+//const int fy[] = {-1, 0, +1, 0};
 //const int fx[]={+0,+0,+1,-1,-1,+1,-1,+1};   // Kings Move
 //const int fy[]={-1,+1,+0,+0,+1,+1,-1,-1};  // Kings Move
 //const int fx[]={-2, -2, -1, -1,  1,  1,  2,  2};  // Knights Move
@@ -217,125 +217,18 @@ const long double EPS = 1e-9;
 const int inf = 0x3f3f3f3f;
 const int mx = (int)1e5+9;
 
-ll n,m,a,b,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
+ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
 
-ll w = 0,step = 0 ;
-bool v[8][8];
-int reserved[49];
-
-void solve(ll r,ll c)
-{
-    if(r==6 and c==0)
-    {
-        if(step==48)
-            w++;
-        return;
-    }
-    bool t = v[r][c]
-             || ( (c > 0 && c < 6 && !v[r][c + 1] && !v[r][c - 1] && ((r == 0 && v[r + 1][c]) || (r == 6 && v[r - 1][c])) ) /// hit the up or bottom
-             || ( r > 0 && r < 6 && !v[r + 1][c] && !v[r - 1][c] && ((c == 0 && v[r][c + 1]) || (c == 6 && v[r][c - 1]))) ) /// hit the side wall
-             || (r > 0 && r < 6 && c > 0 && c < 6 && v[r - 1][c] && v[r + 1][c] && !v[r][c - 1] && !v[r][c + 1]) /// cross path up and down
-             || (r > 0 && r < 6 && c > 0 && c < 6 && v[r][c - 1] && v[r][c + 1] && !v[r - 1][c] && !v[r + 1][c]); /// cross path left and right
-    if(t)
-        return;
-
-    v[r][c] = true;
-    if(reserved[step]!=-1)
-    {
-        switch(reserved[step])
-        {
-        case 0 :
-            if(r>0 and !v[r-1][c]) /// up
-            {
-                step++;
-                solve(r-1,c);
-                step--;
-            }
-            break;
-
-        case 2:
-            if(r<6 and !v[r+1][c]) /// down
-            {
-                step++;
-                solve(r+1,c);
-                step--;
-            }
-            break;
-        case 3:
-            if(c>0 and !v[r][c-1]) /// left
-            {
-                step++;
-                solve(r,c-1);
-                step--;
-            }
-            break;
-        case 1:
-            if(c<6 and !v[r][c+1]) /// right
-            {
-                step++;
-                solve(r,c+1);
-                step--;
-            }
-            break;
-
-        }
-        v[r][c] = false;
-        return ;
-
-    }
-    if(r>0 and !v[r-1][c]) /// up
-    {
-        step++;
-        solve(r-1,c);
-        step--;
-    }
-    if(r<6 and !v[r+1][c]) /// down
-    {
-        step++;
-        solve(r+1,c);
-        step--;
-    }
-    if(c>0 and !v[r][c-1]) /// left
-    {
-        step++;
-        solve(r,c-1);
-        step--;
-    }
-    if(c<6 and !v[r][c+1]) /// right
-    {
-        step++;
-        solve(r,c+1);
-        step--;
-    }
-    v[r][c] = false;
-}
 int main()
 {
-    //  freopen("in.txt","r",stdin);
-    fastio;
+    string s ;
+    cin >> s ;
+    vector<string>vc;
+    sort(all(s));
 
-    string str;
-    cin >> str ;
-    f0(i,str.sz)
-    {
-        if(str[i]=='?')
-            reserved[i] = -1;
-        else if(str[i]=='U')
-            reserved[i] = 0;
-        else if(str[i]=='R')
-            reserved[i] = 1;
-        else if(str[i]=='D')
-            reserved[i] = 2;
-        else if(str[i]=='L')
-            reserved[i] = 3;
-    }
-    step = 0 ;
-    solve(0,0);
-    cout << w << ln ;
-
-   // timeStamp;
-
-
-
-    /// Comment the debugger section
+    do vc.pb(s); while (next_permutation(all(s)));
+            cout << vc.sz << ln ;
+            for(auto it : vc)
+                cout << it << ln ;
 }
+

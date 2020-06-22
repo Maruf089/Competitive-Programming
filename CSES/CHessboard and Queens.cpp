@@ -34,77 +34,20 @@ typedef pair<ll, ll> pll;
 
 ///Inline functions
 
-inline bool EQ(double a, double b)
-{
-    return fabs(a-b) < 1e-9;
-}
+inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
 //inline bool isLeapYearll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
-inline void normal(ll &a)
-{
-    a %= MOD;
-    (a < 0) && (a += MOD);
-}
-inline ll modMul(ll a, ll b)
-{
-    a %= MOD, b %= MOD;
-    normal(a), normal(b);
-    return (a*b)%MOD;
-}
-inline ll modAdd(ll a, ll b)
-{
-    a %= MOD, b %= MOD;
-    normal(a), normal(b);
-    return (a+b)%MOD;
-}
-inline ll modSub(ll a, ll b)
-{
-    a %= MOD, b %= MOD;
-    normal(a), normal(b);
-    a -= b;
-    normal(a);
-    return a;
-}
-inline ll modPow(ll b, ll p)
-{
-    ll r = 1;
-    while(p)
-    {
-        if(p&1)
-            r = modMul(r, b);
-        b = modMul(b, b);
-        p >>= 1;
-    }
-    return r;
-}
-inline ll modInverse(ll a)
-{
-    return modPow(a, MOD-2);
-}
-inline ll modDiv(ll a, ll b)
-{
-    return modMul(a, modInverse(b));
-}
-inline bool isInside(pii p,ll n,ll m)
-{
-    return (p.first>=0&&p.first<n&&p.second>=0&&p.second<m);
-}
-inline bool isInside(pii p,ll n)
-{
-    return (p.first>=0&&p.first<n&&p.second>=0&&p.second<n);
-}
-inline bool isSquare(ll x)
-{
-    ll s = sqrt(x);
-    return (s*s==x);
-}
-inline bool isFib(ll x)
-{
-    return isSquare(5*x*x+4)|| isSquare(5*x*x-4);
-}
-inline bool isPowerOfTwo(ll x)
-{
-    return ((1LL<<(ll)log2(x))==x);
-}
+inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
+inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
+inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
+inline ll modSub(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); a -= b; normal(a); return a; }
+inline ll modPow(ll b, ll p) { ll r = 1; while(p) { if(p&1) r = modMul(r, b); b = modMul(b, b); p >>= 1; } return r; }
+inline ll modInverse(ll a) { return modPow(a, MOD-2); }
+inline ll modDiv(ll a, ll b) { return modMul(a, modInverse(b)); }
+inline bool isInside(pii p,ll n,ll m){ return (p.first>=0&&p.first<n&&p.second>=0&&p.second<m); }
+inline bool isInside(pii p,ll n){ return (p.first>=0&&p.first<n&&p.second>=0&&p.second<n); }
+inline bool isSquare(ll x){ ll s = sqrt(x);    return (s*s==x); }
+inline bool isFib(ll x) { return isSquare(5*x*x+4)|| isSquare(5*x*x-4); }
+inline bool isPowerOfTwo(ll x){ return ((1LL<<(ll)log2(x))==x); }
 
 
 /// DEBUG --------------------------------------------------------------------------------->>>>>>
@@ -195,8 +138,8 @@ struct func
 };
 /*------------------------------Graph Moves----------------------------*/
 //Rotation: S -> E -> N -> W
-const int fx[] = {0, +1, 0, -1};
-const int fy[] = {-1, 0, +1, 0};
+//const int fx[] = {0, +1, 0, -1};
+//const int fy[] = {-1, 0, +1, 0};
 //const int fx[]={+0,+0,+1,-1,-1,+1,-1,+1};   // Kings Move
 //const int fy[]={-1,+1,+0,+0,+1,+1,-1,-1};  // Kings Move
 //const int fx[]={-2, -2, -1, -1,  1,  1,  2,  2};  // Knights Move
@@ -217,125 +160,47 @@ const long double EPS = 1e-9;
 const int inf = 0x3f3f3f3f;
 const int mx = (int)1e5+9;
 
-ll n,m,a,b,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
+ll ways ,n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
 
-ll w = 0,step = 0 ;
-bool v[8][8];
-int reserved[49];
-
-void solve(ll r,ll c)
+bool col[16] , diag1[16]  ,diag2[16] , reserve[9][9];
+void search(ll r)
 {
-    if(r==6 and c==0)
+    if(r==8)
     {
-        if(step==48)
-            w++;
+        ways++;
         return;
     }
-    bool t = v[r][c]
-             || ( (c > 0 && c < 6 && !v[r][c + 1] && !v[r][c - 1] && ((r == 0 && v[r + 1][c]) || (r == 6 && v[r - 1][c])) ) /// hit the up or bottom
-             || ( r > 0 && r < 6 && !v[r + 1][c] && !v[r - 1][c] && ((c == 0 && v[r][c + 1]) || (c == 6 && v[r][c - 1]))) ) /// hit the side wall
-             || (r > 0 && r < 6 && c > 0 && c < 6 && v[r - 1][c] && v[r + 1][c] && !v[r][c - 1] && !v[r][c + 1]) /// cross path up and down
-             || (r > 0 && r < 6 && c > 0 && c < 6 && v[r][c - 1] && v[r][c + 1] && !v[r - 1][c] && !v[r + 1][c]); /// cross path left and right
-    if(t)
-        return;
-
-    v[r][c] = true;
-    if(reserved[step]!=-1)
+    for(int c=0;c<8;c++)
     {
-        switch(reserved[step])
-        {
-        case 0 :
-            if(r>0 and !v[r-1][c]) /// up
-            {
-                step++;
-                solve(r-1,c);
-                step--;
-            }
-            break;
-
-        case 2:
-            if(r<6 and !v[r+1][c]) /// down
-            {
-                step++;
-                solve(r+1,c);
-                step--;
-            }
-            break;
-        case 3:
-            if(c>0 and !v[r][c-1]) /// left
-            {
-                step++;
-                solve(r,c-1);
-                step--;
-            }
-            break;
-        case 1:
-            if(c<6 and !v[r][c+1]) /// right
-            {
-                step++;
-                solve(r,c+1);
-                step--;
-            }
-            break;
-
-        }
-        v[r][c] = false;
-        return ;
-
+        if(col[c] || diag1[r+c] || diag2[r-c+7] || reserve[r][c])
+            continue;
+        col[c] = diag1[r+c] = diag2[r-c+7] = true;
+        search(r+1);
+        col[c] = diag1[r+c] = diag2[r-c+7] = false;
     }
-    if(r>0 and !v[r-1][c]) /// up
-    {
-        step++;
-        solve(r-1,c);
-        step--;
-    }
-    if(r<6 and !v[r+1][c]) /// down
-    {
-        step++;
-        solve(r+1,c);
-        step--;
-    }
-    if(c>0 and !v[r][c-1]) /// left
-    {
-        step++;
-        solve(r,c-1);
-        step--;
-    }
-    if(c<6 and !v[r][c+1]) /// right
-    {
-        step++;
-        solve(r,c+1);
-        step--;
-    }
-    v[r][c] = false;
 }
+
 int main()
 {
-    //  freopen("in.txt","r",stdin);
-    fastio;
+  //  freopen("in.txt","r",stdin);
+  fastio;
 
-    string str;
-    cin >> str ;
-    f0(i,str.sz)
-    {
-        if(str[i]=='?')
-            reserved[i] = -1;
-        else if(str[i]=='U')
-            reserved[i] = 0;
-        else if(str[i]=='R')
-            reserved[i] = 1;
-        else if(str[i]=='D')
-            reserved[i] = 2;
-        else if(str[i]=='L')
-            reserved[i] = 3;
-    }
-    step = 0 ;
-    solve(0,0);
-    cout << w << ln ;
-
-   // timeStamp;
+     f0(i,16)
+      col[i] = diag1[i] = diag2[i] = false;
+      char ch ;
+      f0(i,8)
+      {
+          f0(j,8)
+          {
+              cin >> ch;
+              if(ch=='*')
+                reserve[i][j] = true;
+          }
+      }
+     search(0);
+     cout << ways << ln;
 
 
 
-    /// Comment the debugger section
+  /// Comment the debugger section
 }
