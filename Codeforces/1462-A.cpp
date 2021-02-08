@@ -8,7 +8,6 @@
 using namespace std;
 #define ln '\n'
 #define inp(x) scanf("%lld",&x)
-#define inps(x) scanf("%s",x)
 #define inp2(a,b) scanf("%lld %lld",&a,&b)
 #define No              cout<<"No\n"
 #define Yes             cout<<"Yes\n"
@@ -39,7 +38,7 @@ typedef pair<ll, ll> pll;
 ///Inline functions
 
 inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
-//inline bool isLeapYll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
+//inline bool isLeapYell year) { return (year%400==0) | (year%4==0 && year%100!=0); }
 inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
 inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
 inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
@@ -169,41 +168,34 @@ const int inf = 0x3f3f3f3f;
 const int mx = (int)1e5+9;
 
 ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
 
 int main()
 {
     t = 1;
-   // inp(t);
+    cin >> t ;
     while(t--)
     {
-        inp2(n,a);inp2(b,k);
+        cin >> n ;
+        ll arr[n+9];
+        vector<ll>vc;
+        int l = 0 , r = n-1;
         f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
+        {
+            cin >> arr[i];
+        }
 
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
-
-         printf("%lld\n",ans);
-
+        while(l<=r)
+        {
+            vc.pb(arr[l]);
+            vc.pb(arr[r]);
+            l++,r--;
+        }
+        f0(i,n)
+        {
+            cout << vc[i] << ' ';
+        }
+        cout << ln;
 
     }
 }
-
 

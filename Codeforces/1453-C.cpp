@@ -8,8 +8,8 @@
 using namespace std;
 #define ln '\n'
 #define inp(x) scanf("%lld",&x)
-#define inps(x) scanf("%s",x)
 #define inp2(a,b) scanf("%lld %lld",&a,&b)
+#define inps(x) scanf("%s",x)
 #define No              cout<<"No\n"
 #define Yes             cout<<"Yes\n"
 #define no              cout<<"no\n"
@@ -39,7 +39,7 @@ typedef pair<ll, ll> pll;
 ///Inline functions
 
 inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
-//inline bool isLeapYll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
+//inline bool isLeapYell year) { return (year%400==0) | (year%4==0 && year%100!=0); }
 inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
 inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
 inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
@@ -166,44 +166,100 @@ typedef tree<int, null_type, less_equal<int>, rb_tree_tag,
 const ll INF = 0x3f3f3f3f3f3f3f3f;
 const long double EPS = 1e-9;
 const int inf = 0x3f3f3f3f;
-const int mx = (int)1e5+9;
+const int mx = (int)2000+9;
 
 ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
+
+vector<ll>row[mx][10],col[mx][10];
+ll res[12];
+ll mnrow[10],mxrow[10],mncol[10],mxcol[10];
 
 int main()
 {
-    t = 1;
-   // inp(t);
+    cin >> t ;
     while(t--)
     {
-        inp2(n,a);inp2(b,k);
+        cin >> n ;
+        string s[n+9];
+
         f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
+        {
+            f0(j,10)
+            {
+                row[i][j].clear();
+                col[i][j].clear();
+            }
+        }
 
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
+        f0(i,n)
+        {
+            cin >> s[i];
+            f0(j,n)
+            {
+                int d = s[i][j] - '0';
+                row[i][d].pb(j);
+                col[j][d].pb(i);
+            }
+        }
 
-         printf("%lld\n",ans);
+        MEM(mnrow,-1);
+        MEM(mncol,-1);
+        MEM(mxrow,-1);
+        MEM(mxcol,-1);
 
+        f0(i,n)
+        {
+            f0(d,10)
+            {
+                if(row[i][d].sz)
+                {
+                   if(mnrow[d]==-1)
+                    mnrow[d] = i;
+                    mxrow[d]=i;
+                }
+
+                if(col[i][d].sz)
+                {
+                   if(mncol[d]==-1)
+                    mncol[d] = i;
+                    mxcol[d]=i;
+                }
+            }
+        }
+
+        MEM(res,0);
+        f0(i,n)
+        {
+            f0(d,10)
+            {
+                /// row
+                if(row[i][d].sz)
+                {
+                    int x = row[i][d].front();
+                    int y = row[i][d].back();
+                    res[d] = max(res[d]*1LL , abs(x-y)* max(i-0LL,n-1LL-i));
+                    int height = 0 ;
+                    height = max( i - mnrow[d] , mxrow[d] - i );
+                    res[d] = max(res[d] , height * max(y-0LL,n-1LL-x));
+                }
+                /// col
+                if(col[i][d].sz)
+                {
+                    int x = col[i][d].front();
+                    int y = col[i][d].back();
+                    res[d] = max(res[d] , abs(x-y) * max(i-0LL,n-1LL-i));
+                    int height = 0 ;
+                    height = max( i - mncol[d] , mxcol[d] - i );
+                    res[d] = max(res[d] , height * max(y-0LL,n-1LL-x));
+                }
+
+            }
+        }
+
+        f0(i,10)
+            cout << res[i] << ' ';
+        cout << ln;
 
     }
 }
-
 

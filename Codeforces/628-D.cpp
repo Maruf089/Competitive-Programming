@@ -7,9 +7,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define ln '\n'
-#define inp(x) scanf("%lld",&x)
-#define inps(x) scanf("%s",x)
-#define inp2(a,b) scanf("%lld %lld",&a,&b)
 #define No              cout<<"No\n"
 #define Yes             cout<<"Yes\n"
 #define no              cout<<"no\n"
@@ -39,7 +36,7 @@ typedef pair<ll, ll> pll;
 ///Inline functions
 
 inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
-//inline bool isLeapYll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
+//inline bool isLeapYeall year) { return (year%400==0) | (year%4==0 && year%100!=0); }
 inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
 inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
 inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
@@ -56,7 +53,7 @@ inline bool isPowerOfTwo(ll x){ return ((1LL<<(ll)log2(x))==x); }
 
 /// DEBUG --------------------------------------------------------------------------------->>>>>>
 
-///**
+/**
 template < typename F, typename S >
 ostream& operator << ( ostream& os, const pair< F, S > & p )
 {
@@ -168,42 +165,54 @@ const long double EPS = 1e-9;
 const int inf = 0x3f3f3f3f;
 const int mx = (int)1e5+9;
 
-ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
+ll digit,n,m,t,tt,limit,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
+
+string a,b;
+int dp[2009][2009][2][2];
+
+ll solve(int pos, int rem, bool l, bool r)
+{
+	if (pos == (int)a.size()) return rem == 0 ? 1 : 0;
+	int &ret = dp[pos][rem][l][r];
+	if (ret != -1)
+        return ret;
+
+	ret = 0;
+	for (int i = 0; i <= 9; i++) {
+		if (i < a[pos] - '0' && l == 0)
+            continue;
+		if (i > b[pos] - '0' && r == 0)
+            continue;
+		if (pos % 2 == 1 && i != d)
+            continue;
+		if (pos % 2 == 0 && i == d)
+            continue;
+		ret = modAdd(ret, solve(pos + 1, (rem * 10 + i) % m, l | i > a[pos] - '0', r | i < b[pos] - '0'));
+	}
+	return ret;
+}
 
 int main()
 {
-    t = 1;
-   // inp(t);
-    while(t--)
-    {
-        inp2(n,a);inp2(b,k);
-        f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
+  //  freopen("in.txt","r",stdin);
+  fastio;
 
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
+      t = 1 ;
+    //  cin >> t ;
+      while(t--)
+      {
+          cin >> m >> d >> a >> b ;
 
-         printf("%lld\n",ans);
+          MEM(dp,-1);
+          cout << solve(0,0,0,0) << endl;
+      }
 
 
-    }
+
+
+
+
+  /// Comment the debugger section
 }
 
 

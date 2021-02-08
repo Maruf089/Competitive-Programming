@@ -8,7 +8,6 @@
 using namespace std;
 #define ln '\n'
 #define inp(x) scanf("%lld",&x)
-#define inps(x) scanf("%s",x)
 #define inp2(a,b) scanf("%lld %lld",&a,&b)
 #define No              cout<<"No\n"
 #define Yes             cout<<"Yes\n"
@@ -39,7 +38,7 @@ typedef pair<ll, ll> pll;
 ///Inline functions
 
 inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
-//inline bool isLeapYll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
+//inline bool isLeapYell year) { return (year%400==0) | (year%4==0 && year%100!=0); }
 inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
 inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
 inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
@@ -169,41 +168,49 @@ const int inf = 0x3f3f3f3f;
 const int mx = (int)1e5+9;
 
 ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
+
+
+unordered_set<string>vc[70000+10];
+unordered_map<string,int>mp;
+string s[70000+10];
 
 int main()
 {
-    t = 1;
-   // inp(t);
-    while(t--)
+    fastio;cin.tie(0);cout.tie(0);
+    cin >> n ;
+    f0(i,n)
     {
-        inp2(n,a);inp2(b,k);
-        f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
+        cin >> s[i] ;
+        for(int ii=0;ii<s[i].sz;ii++)
+        {
+            string ss  = "";
+            for(j=ii;j<s[i].sz;j++)
+            {
+                ss += s[i][j];
+                vc[i].insert(ss);
+            }
+        }
 
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
-
-         printf("%lld\n",ans);
-
-
+        for(auto it : vc[i])
+          {
+              mp[it]++;
+          }
     }
-}
 
+    f0(i,n)
+    {
+        string res = "111111111111";
+        for(auto it : vc[i])
+        {
+            int ans = mp[it];
+            if(ans==1)
+            {
+                if(res.sz>it.sz)
+                    res = it;
+            }
+        }
+        cout << res << endl;
+    }
+
+}
 

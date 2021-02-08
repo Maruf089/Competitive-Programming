@@ -141,9 +141,9 @@ void faltu( T arg, const hello &... rest)
 
 /// Bit Operations
 
-/// inline bool checkBit(ll n, int i) { return n&(1LL<<i); }
-/// inline ll setBit(ll n, int i) { return n|(1LL<<i); }
-/// inline ll resetBit(ll n, int i) { return n&(~(1LL<<i)); }
+inline bool checkBit(ll n, int i) { return n&(1LL<<i); }
+inline ll setBit(ll n, int i) { return n|(1LL<<i); }
+inline ll resetBit(ll n, int i) { return n&(~(1LL<<i)); }
 
 
 /// ************************************** Code starts here ****************************************** */
@@ -166,44 +166,66 @@ typedef tree<int, null_type, less_equal<int>, rb_tree_tag,
 const ll INF = 0x3f3f3f3f3f3f3f3f;
 const long double EPS = 1e-9;
 const int inf = 0x3f3f3f3f;
-const int mx = (int)1e5+9;
+const int mx = (int)3e6+9;
 
 ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
 
+int tree[mx][2];
+int subtree_size[mx][2];
+int cur , type;
+
+void update(int a,int type)
+{
+    int node = 1;
+    for(i=30;i>=0;i--)
+    {
+        int bit = checkBit(a,i);
+        if(!tree[node][bit])
+        {
+            tree[node][bit] = ++cur;
+        }
+        subtree_size[node][bit] += type;
+        node = tree[node][bit];
+    }
+}
+void query(ll a,ll b)
+{
+   counT = 0 ;
+   int node = 1;
+   for(i=30;i>=0;i--)
+   {
+       int abit = checkBit(a,i);
+       int bbit = checkBit(b,i);
+       if(bbit) /// go for 0 or 1
+       {
+           counT += subtree_size[node][abit];
+           node = tree[node][!abit];
+       }
+       else /// go for same value
+       {
+           node = tree[node][abit];
+       }
+   }
+   printf("%lld\n",counT);
+}
 int main()
 {
-    t = 1;
-   // inp(t);
-    while(t--)
+    cur = 1;
+    inp(n);
+    f0(i,n)
     {
-        inp2(n,a);inp2(b,k);
-        f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
-
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
-
-         printf("%lld\n",ans);
-
-
+        inp2(a,b);
+        if(a==1)
+            update(b,1);
+        else if(a==2)
+            update(b,-1);
+        else
+        {
+            inp(cs);
+            query(b,cs);
+        }
     }
+
 }
 
 

@@ -169,40 +169,44 @@ const int inf = 0x3f3f3f3f;
 const int mx = (int)1e5+9;
 
 ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
+vector<ll>vc,vc1;
 
 int main()
 {
-    t = 1;
-   // inp(t);
-    while(t--)
+    inp(n);
+    f0(i,n)
     {
-        inp2(n,a);inp2(b,k);
-        f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
+        inp(a);
+        vc.pb(a);
+        vc1.pb(a);
+    }
+    if(n==1)
+    {
+        cout << "1 1\n0\n1 1\n0\n1 1\n" << -a;
+        vc1[0] -= a;
+    }
+    else
+    {
+        cout << "1 1\n" << -vc[0] << ln;
+        vc1[0] -= vc1[0];
+        cout << "1 " << n << ln;
+        for(i=0;i<n;i++)
+        {
+            if(i==0)cout << 0 << ' ';
+            else cout << (-n)*vc[i] << ' ';
+     //       vc1[i] += (-n)*vc1[i];
+        }
+        cout << ln;
 
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
+        cout << "2 " << n << ln;
+        for(i=1;i<n;i++)
+        {
+            cout << (n-1)*vc[i] << ' ';
+     ///        vc1[i] += (n-1)*vc[i];
+        }
+        cout << ln;
 
-         printf("%lld\n",ans);
-
-
+       // dbg(vc1);
     }
 }
 

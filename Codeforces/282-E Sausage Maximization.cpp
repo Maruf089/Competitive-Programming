@@ -8,7 +8,6 @@
 using namespace std;
 #define ln '\n'
 #define inp(x) scanf("%lld",&x)
-#define inps(x) scanf("%s",x)
 #define inp2(a,b) scanf("%lld %lld",&a,&b)
 #define No              cout<<"No\n"
 #define Yes             cout<<"Yes\n"
@@ -39,7 +38,7 @@ typedef pair<ll, ll> pll;
 ///Inline functions
 
 inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
-//inline bool isLeapYll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
+//inline bool isLeapYell year) { return (year%400==0) | (year%4==0 && year%100!=0); }
 inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
 inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
 inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
@@ -141,8 +140,8 @@ void faltu( T arg, const hello &... rest)
 
 /// Bit Operations
 
-/// inline bool checkBit(ll n, int i) { return n&(1LL<<i); }
-/// inline ll setBit(ll n, int i) { return n|(1LL<<i); }
+ inline bool checkBit(ll n, int i) { return n&(1LL<<i); }
+ inline ll setBit(ll n, int i) { return n|(1LL<<i); }
 /// inline ll resetBit(ll n, int i) { return n&(~(1LL<<i)); }
 
 
@@ -169,41 +168,100 @@ const int inf = 0x3f3f3f3f;
 const int mx = (int)1e5+9;
 
 ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
+
+ll arr[mx] , pref[mx] , suff[mx];
+
+struct node
+{
+    int lft, rgt;
+    node()
+    {lft=rgt=-1;}
+};
+node tree[mx*60];
+int nodeNum;
+
+void insert(ll x)
+{
+    ll pos=0, bit;
+    for(int i=59; i>=0; i--)
+    {
+        bit = checkBit(x,i);
+        if(bit)
+        {
+            if(tree[pos].rgt==-1)
+            {
+                tree[pos].rgt=++nodeNum;
+                tree[nodeNum]=node();
+            }
+            pos=tree[pos].rgt;
+        }
+        else
+        {
+            if(tree[pos].lft==-1)
+            {
+                tree[pos].lft=++nodeNum;
+                tree[nodeNum]=node();
+            }
+            pos=tree[pos].lft;
+        }
+    }
+    return;
+}
+
+ll query(ll k)
+{
+    ll pos=0, bit_k ,res=0;
+    for(int i=59; i>=0; i--)
+    {
+        bit_k = checkBit(k,i);
+        if(bit_k)
+        {
+            if(tree[pos].lft!=-1)
+            {
+                res |= (1LL<<i);
+                pos = tree[pos].lft;
+            }
+            else
+                pos=tree[pos].rgt;
+        }
+        else
+        {
+            if(tree[pos].rgt!=-1)
+            {
+                res |= (1LL<<i);
+                pos=tree[pos].rgt;
+            }
+            else
+                pos=tree[pos].lft;
+        }
+    }
+    return res;
+}
+
 
 int main()
 {
-    t = 1;
-   // inp(t);
-    while(t--)
+    fastio;cin.tie(0);cout.tie(0);
+
+    cin >> n ;
+    f1(i,n)
     {
-        inp2(n,a);inp2(b,k);
-        f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
-
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
-
-         printf("%lld\n",ans);
-
-
+        cin >> arr[i];
+        pref[i] = pref[i-1] ^ arr[i];
+        Max = max(pref[i],Max);
     }
-}
+    for(int i=n;i>=1;i--)
+        {
+            suff[i] = suff[i+1] ^ arr[i];
+            Max = max(Max,suff[i]);
+        }
 
+    f1(i,n)
+    {
+        insert(pref[i-1]);
+        Max = max(Max,query(suff[i]));
+    }
+
+    cout << Max << endl;
+}
 

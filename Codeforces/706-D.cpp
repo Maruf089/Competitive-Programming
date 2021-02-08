@@ -166,43 +166,111 @@ typedef tree<int, null_type, less_equal<int>, rb_tree_tag,
 const ll INF = 0x3f3f3f3f3f3f3f3f;
 const long double EPS = 1e-9;
 const int inf = 0x3f3f3f3f;
-const int mx = (int)1e5+9;
+const int mx = (int)300000+9;
 
-ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
+ll n,q,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
 
+int tree[mx*32][2];
+int cnt[mx*32][2];
+int nodeNum;
+void Init()
+{
+    nodeNum = 0 ;
+    tree[0][0] = tree[0][1] = 0;
+}
+void Insrt(ll x)
+{
+    ll pos=0, bit;
+    for(int i=31; i>=0; i--)
+    {
+        bit = (x>>i)&1;
+        if(bit)
+        {
+            if(tree[pos][1] == 0)
+            {
+                tree[pos][1] = ++nodeNum;
+                MEM(tree[nodeNum],0);
+            }
+            cnt[pos][1]++;
+            pos = tree[pos][1];
+        }
+        else
+        {
+            if(tree[pos][0] == 0 )
+            {
+                tree[pos][0] = ++nodeNum;
+                MEM(tree[nodeNum],0);
+            }
+            cnt[pos][0]++;
+            pos = tree[pos][0];
+        }
+    }
+    return;
+}
+
+ll Qry_max(ll x)
+{
+    ll pos=0, bit , res = 0;
+    for(int i=31; i>=0; i--)
+    {
+        bit = (x>>i)&1;
+        if(bit)
+        {
+            if(tree[pos][0]!=0 and cnt[pos][0]>0)
+            {
+                res |= (1<<i);
+                pos = tree[pos][0];
+            }
+            else
+                pos = tree[pos][1];
+        }
+        else
+        {
+            if(tree[pos][1]!=0 and cnt[pos][1]>0)
+            {
+                res |= (1<<i);
+                pos = tree[pos][1];
+            }
+            else
+                pos = tree[pos][0];
+        }
+    }
+    return res;
+}
+void Delete(ll a)
+{
+    ll pos = 0 , bit;
+    for(int i=31; i>=0; i--)
+    {
+         bit = (a>>i)&1;
+         if(bit)
+         {
+             cnt[pos][1]--;
+             pos = tree[pos][1];
+         }
+         else
+         {
+             cnt[pos][0]--;
+             pos = tree[pos][0];
+         }
+    }
+    return;
+}
 int main()
 {
-    t = 1;
-   // inp(t);
-    while(t--)
+    Init();
+    cin >> q;
+    Insrt(0);
+    while(q--)
     {
-        inp2(n,a);inp2(b,k);
-        f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
-
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
-
-         printf("%lld\n",ans);
-
-
+        char ch;
+        cin >> ch >> a;
+        if(ch=='+')
+            Insrt(a);
+        else if(ch=='-')
+            Delete(a);
+        else
+            cout << Qry_max(a) << endl;
     }
 }
 

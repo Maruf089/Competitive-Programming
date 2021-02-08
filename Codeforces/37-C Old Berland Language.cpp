@@ -8,7 +8,6 @@
 using namespace std;
 #define ln '\n'
 #define inp(x) scanf("%lld",&x)
-#define inps(x) scanf("%s",x)
 #define inp2(a,b) scanf("%lld %lld",&a,&b)
 #define No              cout<<"No\n"
 #define Yes             cout<<"Yes\n"
@@ -39,7 +38,7 @@ typedef pair<ll, ll> pll;
 ///Inline functions
 
 inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
-//inline bool isLeapYll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
+//inline bool isLeapYell year) { return (year%400==0) | (year%4==0 && year%100!=0); }
 inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
 inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
 inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
@@ -169,41 +168,54 @@ const int inf = 0x3f3f3f3f;
 const int mx = (int)1e5+9;
 
 ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
 
+struct Node
+{
+    int len,pos;
+    string str;
+}arr[mx];
+void solve(int pos,string s = "")
+{
+    if(cs==n) return ;
+    if(pos==arr[cs].len)
+    {
+        arr[cs].str = s;
+        cs++;
+        if(cs==n)
+            counT=1;
+        return ;
+    }
+    solve(pos+1,s + '0');
+    solve(pos+1,s + '1');
+}
+bool cmp(Node a,Node b)
+{
+    return a.len<b.len;
+}
+bool cmp1(Node a,Node b)
+{
+    return a.pos<b.pos;
+}
 int main()
 {
-    t = 1;
-   // inp(t);
-    while(t--)
+    fastio;cin.tie(0);cout.tie(0);
+    cin >> n ;
+    f0(i,n)
     {
-        inp2(n,a);inp2(b,k);
+      cin >> arr[i].len;
+      arr[i].pos = i;
+      arr[i].str = "";
+    }
+    sort(arr,arr+n,cmp);
+    solve(0);
+
+    if(counT==0)
+        NO;
+    else
+    {
+        YES;
+        sort(arr,arr+n,cmp1);
         f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
-
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
-
-         printf("%lld\n",ans);
-
-
+            cout << arr[i].str << ln;
     }
 }
-
-

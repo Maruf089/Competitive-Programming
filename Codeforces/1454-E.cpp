@@ -8,7 +8,6 @@
 using namespace std;
 #define ln '\n'
 #define inp(x) scanf("%lld",&x)
-#define inps(x) scanf("%s",x)
 #define inp2(a,b) scanf("%lld %lld",&a,&b)
 #define No              cout<<"No\n"
 #define Yes             cout<<"Yes\n"
@@ -39,7 +38,7 @@ typedef pair<ll, ll> pll;
 ///Inline functions
 
 inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
-//inline bool isLeapYll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
+//inline bool isLeapYell year) { return (year%400==0) | (year%4==0 && year%100!=0); }
 inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
 inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
 inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
@@ -56,7 +55,7 @@ inline bool isPowerOfTwo(ll x){ return ((1LL<<(ll)log2(x))==x); }
 
 /// DEBUG --------------------------------------------------------------------------------->>>>>>
 
-///**
+/**
 template < typename F, typename S >
 ostream& operator << ( ostream& os, const pair< F, S > & p )
 {
@@ -166,44 +165,88 @@ typedef tree<int, null_type, less_equal<int>, rb_tree_tag,
 const ll INF = 0x3f3f3f3f3f3f3f3f;
 const long double EPS = 1e-9;
 const int inf = 0x3f3f3f3f;
-const int mx = (int)1e5+9;
+const int mx = (int)2e5+9;
 
 ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
 
-int main()
+vector<ll>vc[mx],parent;
+vector<bool>cycle,vis;
+bool found = false;
+
+void dfs1(int u)
 {
-    t = 1;
-   // inp(t);
-    while(t--)
+    vis[u] = true;
+    for(auto v : vc[u])
     {
-        inp2(n,a);inp2(b,k);
-        f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
-
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
-
-         printf("%lld\n",ans);
-
-
+        if(v==parent[u])
+            continue;
+        if(vis[v])
+        {
+            for(int x = u ; x!=parent[v] ;x = parent[x])
+                cycle[x] = true;
+            found = true;
+            return;
+        }
+        parent[v] = u;
+        dfs1(v);
+        if(found)
+            return ;
     }
 }
 
+int dfs2(int u)
+{
+    int siz = 1;
+    for(auto v : vc[u])
+    {
+        if(v==parent[u] or cycle[v])
+            continue;
+        parent[v] = u ;
+        siz += dfs2(v);
+    }
+    return siz;
+}
+int main()
+{
+    t = 1;
+    cin >> t ;
+    while(t--)
+    {
+        cin >> n ;
+        f0(i,n)
+        {
+            cin >> a >> b ;
+            a--,b--;
+            vc[a].pb(b);
+            vc[b].pb(a);
+        }
 
+        parent.assign(n,-1);
+        cycle.resize(n);
+        vis.resize(n);
+
+        found = false;
+        dfs1(0);
+
+        parent.assign(n,-1);
+        ll ans = n*(n-1);
+        f0(i,n)
+        {
+            if(cycle[i])
+            {
+                ll x = dfs2(i);
+                ans -= (x * (x-1))/2;
+            }
+        }
+
+        cout << ans << endl;
+
+        f0(i,n+3)
+        {
+            vc[i].clear();
+        }
+        parent.clear();
+        cycle.clear();
+        vis.clear();
+    }
+}

@@ -8,7 +8,6 @@
 using namespace std;
 #define ln '\n'
 #define inp(x) scanf("%lld",&x)
-#define inps(x) scanf("%s",x)
 #define inp2(a,b) scanf("%lld %lld",&a,&b)
 #define No              cout<<"No\n"
 #define Yes             cout<<"Yes\n"
@@ -38,20 +37,77 @@ typedef pair<ll, ll> pll;
 #define fastio  ios_base::sync_with_stdio(false);
 ///Inline functions
 
-inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
-//inline bool isLeapYll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
-inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
-inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
-inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
-inline ll modSub(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); a -= b; normal(a); return a; }
-inline ll modPow(ll b, ll p) { ll r = 1; while(p) { if(p&1) r = modMul(r, b); b = modMul(b, b); p >>= 1; } return r; }
-inline ll modInverse(ll a) { return modPow(a, MOD-2); }
-inline ll modDiv(ll a, ll b) { return modMul(a, modInverse(b)); }
-inline bool isInside(pii p,ll n,ll m){ return (p.first>=0&&p.first<n&&p.second>=0&&p.second<m); }
-inline bool isInside(pii p,ll n){ return (p.first>=0&&p.first<n&&p.second>=0&&p.second<n); }
-inline bool isSquare(ll x){ ll s = sqrt(x);    return (s*s==x); }
-inline bool isFib(ll x) { return isSquare(5*x*x+4)|| isSquare(5*x*x-4); }
-inline bool isPowerOfTwo(ll x){ return ((1LL<<(ll)log2(x))==x); }
+inline bool EQ(double a, double b)
+{
+    return fabs(a-b) < 1e-9;
+}
+//inline bool isLeapYell year) { return (year%400==0) | (year%4==0 && year%100!=0); }
+inline void normal(ll &a)
+{
+    a %= MOD;
+    (a < 0) && (a += MOD);
+}
+inline ll modMul(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    return (a*b)%MOD;
+}
+inline ll modAdd(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    return (a+b)%MOD;
+}
+inline ll modSub(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    a -= b;
+    normal(a);
+    return a;
+}
+inline ll modPow(ll b, ll p)
+{
+    ll r = 1;
+    while(p)
+    {
+        if(p&1)
+            r = modMul(r, b);
+        b = modMul(b, b);
+        p >>= 1;
+    }
+    return r;
+}
+inline ll modInverse(ll a)
+{
+    return modPow(a, MOD-2);
+}
+inline ll modDiv(ll a, ll b)
+{
+    return modMul(a, modInverse(b));
+}
+inline bool isInside(pii p,ll n,ll m)
+{
+    return (p.first>=0&&p.first<n&&p.second>=0&&p.second<m);
+}
+inline bool isInside(pii p,ll n)
+{
+    return (p.first>=0&&p.first<n&&p.second>=0&&p.second<n);
+}
+inline bool isSquare(ll x)
+{
+    ll s = sqrt(x);
+    return (s*s==x);
+}
+inline bool isFib(ll x)
+{
+    return isSquare(5*x*x+4)|| isSquare(5*x*x-4);
+}
+inline bool isPowerOfTwo(ll x)
+{
+    return ((1LL<<(ll)log2(x))==x);
+}
 
 
 /// DEBUG --------------------------------------------------------------------------------->>>>>>
@@ -166,44 +222,130 @@ typedef tree<int, null_type, less_equal<int>, rb_tree_tag,
 const ll INF = 0x3f3f3f3f3f3f3f3f;
 const long double EPS = 1e-9;
 const int inf = 0x3f3f3f3f;
-const int mx = (int)1e5+9;
+const int mx = (int)3e5+9;
 
 ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
+
+int tree[4*mx], arr[mx];
+
+void build(int si, int ss, int se)
+{
+    if(ss == se)
+    {
+        tree[si] = arr[ss];
+        return;
+    }
+
+    int mid = (ss + se)/2;
+    build(2*si, ss, mid);
+    build(2*si+1, mid+1, se);
+
+    tree[si] = min(tree[2*si], tree[2*si+1]);
+}
+
+int query(int si, int ss, int se, int qs, int qe)
+{
+    if(qe < ss | qs> se)
+        return INF;
+
+    if(ss>=qs && se<=qe)
+        return tree[si];
+
+    int mid = (ss + se)/2;
+    int l = query(2*si, ss, mid, qs, qe);
+    int r = query(2*si+1, mid+1, se, qs, qe);
+
+    return min(l, r);
+}
 
 int main()
 {
     t = 1;
-   // inp(t);
+    cin >> t ;
     while(t--)
     {
-        inp2(n,a);inp2(b,k);
+        set<ll>st;
+        cin >> n ;
         f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
+        {
+            cin >> arr[i];
+            st.insert(arr[i]);
+        }
+        build(1,0,n-1);
 
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
 
-         printf("%lld\n",ans);
+        int lft = 0, rgt = n-1;
+        int prev = -1;
+        string res = "";
 
+        Min = query(1,0,n-1,lft,rgt);
+        if(Min==1)
+        {
+            prev = 1;
+            res += '1';
+            if(arr[0]==1)
+                lft++;
+            else if(arr[n-1]==1)
+                rgt--;
+            else
+                prev = -1;
+        }
+        else
+            {
+                res += '0';
+                prev = -1;
+            }
+
+        if(n==1)
+        {
+            if(arr[0]==1) res = "1";
+            else res = "0";
+            cout << res << ln;
+            continue;
+        }
+
+
+        for(i=2; i<n; i++)
+        {
+            if(prev==-1)
+            {
+                res += '0';
+            }
+            else
+            {
+                if(lft>rgt)
+                {
+                    res += '0';
+                    prev = -1;
+
+                }
+
+                Min = query(1,0,n-1,lft,rgt);
+                if(Min==i)
+                {
+                    prev = 1;
+                    res += '1';
+                    if(arr[lft]==i)
+                        lft++;
+                    else if(arr[rgt]==i)
+                        rgt--;
+                    else
+                        prev = -1;
+                }
+                else
+                    {
+                        res += '0';
+                        prev = -1;
+                    }
+            }
+        }
+
+        if(st.sz==n) res += '1';
+        else res += '0';
+
+        reverse(all(res));
+        cout << res << endl;
 
     }
 }
-
 

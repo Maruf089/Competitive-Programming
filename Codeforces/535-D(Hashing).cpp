@@ -38,20 +38,77 @@ typedef pair<ll, ll> pll;
 #define fastio  ios_base::sync_with_stdio(false);
 ///Inline functions
 
-inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
+inline bool EQ(double a, double b)
+{
+    return fabs(a-b) < 1e-9;
+}
 //inline bool isLeapYll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
-inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
-inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
-inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
-inline ll modSub(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); a -= b; normal(a); return a; }
-inline ll modPow(ll b, ll p) { ll r = 1; while(p) { if(p&1) r = modMul(r, b); b = modMul(b, b); p >>= 1; } return r; }
-inline ll modInverse(ll a) { return modPow(a, MOD-2); }
-inline ll modDiv(ll a, ll b) { return modMul(a, modInverse(b)); }
-inline bool isInside(pii p,ll n,ll m){ return (p.first>=0&&p.first<n&&p.second>=0&&p.second<m); }
-inline bool isInside(pii p,ll n){ return (p.first>=0&&p.first<n&&p.second>=0&&p.second<n); }
-inline bool isSquare(ll x){ ll s = sqrt(x);    return (s*s==x); }
-inline bool isFib(ll x) { return isSquare(5*x*x+4)|| isSquare(5*x*x-4); }
-inline bool isPowerOfTwo(ll x){ return ((1LL<<(ll)log2(x))==x); }
+inline void normal(ll &a)
+{
+    a %= MOD;
+    (a < 0) && (a += MOD);
+}
+inline ll modMul(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    return (a*b)%MOD;
+}
+inline ll modAdd(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    return (a+b)%MOD;
+}
+inline ll modSub(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    a -= b;
+    normal(a);
+    return a;
+}
+inline ll modPow(ll b, ll p)
+{
+    ll r = 1;
+    while(p)
+    {
+        if(p&1)
+            r = modMul(r, b);
+        b = modMul(b, b);
+        p >>= 1;
+    }
+    return r;
+}
+inline ll modInverse(ll a)
+{
+    return modPow(a, MOD-2);
+}
+inline ll modDiv(ll a, ll b)
+{
+    return modMul(a, modInverse(b));
+}
+inline bool isInside(pii p,ll n,ll m)
+{
+    return (p.first>=0&&p.first<n&&p.second>=0&&p.second<m);
+}
+inline bool isInside(pii p,ll n)
+{
+    return (p.first>=0&&p.first<n&&p.second>=0&&p.second<n);
+}
+inline bool isSquare(ll x)
+{
+    ll s = sqrt(x);
+    return (s*s==x);
+}
+inline bool isFib(ll x)
+{
+    return isSquare(5*x*x+4)|| isSquare(5*x*x-4);
+}
+inline bool isPowerOfTwo(ll x)
+{
+    return ((1LL<<(ll)log2(x))==x);
+}
 
 
 /// DEBUG --------------------------------------------------------------------------------->>>>>>
@@ -166,44 +223,72 @@ typedef tree<int, null_type, less_equal<int>, rb_tree_tag,
 const ll INF = 0x3f3f3f3f3f3f3f3f;
 const long double EPS = 1e-9;
 const int inf = 0x3f3f3f3f;
-const int mx = (int)1e5+9;
+const int mx = (int)1000005+9;
 
 ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
+
+ll pows[mx], hashs[mx], hashs22[mx];
+int getHash(int l,int r)
+{
+    return  ((hashs[r+1]-(hashs[l]*pows[r-l+1])%MOD)+MOD)%MOD;
+}
 
 int main()
 {
-    t = 1;
-   // inp(t);
-    while(t--)
+    int p = 31;
+    pows[0] = 1;
+    for(int i=1; i<=1000005; i++)
     {
-        inp2(n,a);inp2(b,k);
-        f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
+        pows[i] = (pows[i-1]*p)%MOD;
+    }
 
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
+    string s, ss;
+    while(cin >> n >> m)
+    {
+        cin >> s;
 
-         printf("%lld\n",ans);
+        for(int i=0; i<s.size(); i++)
+            hashs[i+1] = (hashs[i]*p+s[i])%MOD;
 
+        int freq[n+9];
+        MEM(freq,0);
 
+        int last = -1;
+        for(i=0; i<m; i++)
+        {
+            cin >> a;
+            a--;
+            if(a+s.size()-1>=n)
+            {
+                cout << 0 << ln;
+                return 0;
+            }
+            if(last>=a)
+            {
+                k = last - a;
+                ll hash1 = getHash(0,k);
+                ll revhash1 = getHash(s.size()-1-k,s.size()-1);
+                if(hash1!=revhash1)
+                {
+                    cout << 0 << ln;
+                    return 0;
+                }
+
+            }
+            last = a + s.size() - 1;
+            freq[a]++;
+            freq[last+1]--;
+        }
+
+        for(int i=1; i<=n; i++)
+            freq[i] += freq[i-1];
+        ll ans=1;
+        for(i=0; i<n; i++)
+        {
+            if(freq[i]==0)
+                ans*=26;
+            ans%=MOD;
+        }
+        cout<<ans<<endl;
     }
 }
-
-

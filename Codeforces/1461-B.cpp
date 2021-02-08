@@ -8,7 +8,6 @@
 using namespace std;
 #define ln '\n'
 #define inp(x) scanf("%lld",&x)
-#define inps(x) scanf("%s",x)
 #define inp2(a,b) scanf("%lld %lld",&a,&b)
 #define No              cout<<"No\n"
 #define Yes             cout<<"Yes\n"
@@ -39,7 +38,7 @@ typedef pair<ll, ll> pll;
 ///Inline functions
 
 inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
-//inline bool isLeapYll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
+//inline bool isLeapYell year) { return (year%400==0) | (year%4==0 && year%100!=0); }
 inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
 inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
 inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
@@ -171,39 +170,68 @@ const int mx = (int)1e5+9;
 ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
 vector<ll>vc;
 map<ll,ll>mp;
-char str[mx];
 
 int main()
 {
-    t = 1;
-   // inp(t);
+    fastio;
+    cin >> t ;
     while(t--)
     {
-        inp2(n,a);inp2(b,k);
-        f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
+        cin >> n >> m ;
+        char arr[n+9][m+9];
+        vector<ll>row[n+9];
+        f1(i,n)
+        {
+            f1(j,m)
+            {
+                cin >> arr[i][j];
+                if(arr[i][j]=='*')
+                {
+                    if(row[i].sz==0)
+                        row[i].pb(0);
+                    row[i].pb(1);
+                }
+                else
+                {
+                    if(row[i].sz==0)
+                        row[i].pb(0);
+                    row[i].pb(0);
+                }
+            }
+        }
+        f1(i,n)
+            f1(j,m)
+                row[i][j] += row[i][j-1];
 
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
-
-         printf("%lld\n",ans);
-
-
+        counT = 0 ;
+        f1(i,n)
+        {
+            f1(j,m)
+            {
+                if(arr[i][j]=='*')
+                {
+                    counT++;
+                    int lft = j-1 ;
+                    int rgt = j+1;
+                    for(int nic = i+1 ; nic<=n;nic++)
+                    {
+                        char ch = arr[nic][j];
+                        if(ch=='.') break;
+                        if(lft>=1 and rgt<=m)
+                        {
+                            int ase = row[nic][rgt] - row[nic][lft-1];
+                            if(ase==(rgt-lft+1))
+                            {
+                                lft-- , rgt++;counT++;
+                            }
+                            else break;
+                        }
+                        else break;
+                    }
+                }
+            }
+        }
+        cout << counT << ln;
     }
 }
-
 

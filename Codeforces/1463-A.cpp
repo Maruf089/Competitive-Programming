@@ -169,40 +169,24 @@ const int inf = 0x3f3f3f3f;
 const int mx = (int)1e5+9;
 
 ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
 
 int main()
 {
     t = 1;
-   // inp(t);
+    inp(t);
     while(t--)
     {
-        inp2(n,a);inp2(b,k);
-        f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
-
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
-
-         printf("%lld\n",ans);
-
-
+        inp2(a,b);inp(cs);
+        sum = a+b+cs;
+        if(sum>=9 and sum%9==0)
+            {
+                ll lagbe = sum / 9 ;
+                Min = min({a,b,cs});
+                if(lagbe<=Min)
+                    YES;
+                else NO;
+            }
+        else NO;
     }
 }
 

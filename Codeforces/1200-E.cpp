@@ -21,6 +21,9 @@ using namespace std;
 #define f1(i,b) for(int i=1;i<=(b);i++)
 
 #define MOD 1000000007
+#define MOD2 1000000009
+
+
 #define PI acos(-1)
 #define ll long long int
 typedef pair<int,int> pii;
@@ -38,20 +41,77 @@ typedef pair<ll, ll> pll;
 #define fastio  ios_base::sync_with_stdio(false);
 ///Inline functions
 
-inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
+inline bool EQ(double a, double b)
+{
+    return fabs(a-b) < 1e-9;
+}
 //inline bool isLeapYll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
-inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
-inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
-inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
-inline ll modSub(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); a -= b; normal(a); return a; }
-inline ll modPow(ll b, ll p) { ll r = 1; while(p) { if(p&1) r = modMul(r, b); b = modMul(b, b); p >>= 1; } return r; }
-inline ll modInverse(ll a) { return modPow(a, MOD-2); }
-inline ll modDiv(ll a, ll b) { return modMul(a, modInverse(b)); }
-inline bool isInside(pii p,ll n,ll m){ return (p.first>=0&&p.first<n&&p.second>=0&&p.second<m); }
-inline bool isInside(pii p,ll n){ return (p.first>=0&&p.first<n&&p.second>=0&&p.second<n); }
-inline bool isSquare(ll x){ ll s = sqrt(x);    return (s*s==x); }
-inline bool isFib(ll x) { return isSquare(5*x*x+4)|| isSquare(5*x*x-4); }
-inline bool isPowerOfTwo(ll x){ return ((1LL<<(ll)log2(x))==x); }
+inline void normal(ll &a)
+{
+    a %= MOD;
+    (a < 0) && (a += MOD);
+}
+inline ll modMul(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    return (a*b)%MOD;
+}
+inline ll modAdd(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    return (a+b)%MOD;
+}
+inline ll modSub(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    a -= b;
+    normal(a);
+    return a;
+}
+inline ll modPow(ll b, ll p)
+{
+    ll r = 1;
+    while(p)
+    {
+        if(p&1)
+            r = modMul(r, b);
+        b = modMul(b, b);
+        p >>= 1;
+    }
+    return r;
+}
+inline ll modInverse(ll a)
+{
+    return modPow(a, MOD-2);
+}
+inline ll modDiv(ll a, ll b)
+{
+    return modMul(a, modInverse(b));
+}
+inline bool isInside(pii p,ll n,ll m)
+{
+    return (p.first>=0&&p.first<n&&p.second>=0&&p.second<m);
+}
+inline bool isInside(pii p,ll n)
+{
+    return (p.first>=0&&p.first<n&&p.second>=0&&p.second<n);
+}
+inline bool isSquare(ll x)
+{
+    ll s = sqrt(x);
+    return (s*s==x);
+}
+inline bool isFib(ll x)
+{
+    return isSquare(5*x*x+4)|| isSquare(5*x*x-4);
+}
+inline bool isPowerOfTwo(ll x)
+{
+    return ((1LL<<(ll)log2(x))==x);
+}
 
 
 /// DEBUG --------------------------------------------------------------------------------->>>>>>
@@ -166,44 +226,65 @@ typedef tree<int, null_type, less_equal<int>, rb_tree_tag,
 const ll INF = 0x3f3f3f3f3f3f3f3f;
 const long double EPS = 1e-9;
 const int inf = 0x3f3f3f3f;
-const int mx = (int)1e5+9;
+const int mx = (int)1e6+9;
 
-ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
+ll n,m,a,b,i,j,d,r,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
 
+
+const ll P1=1e14+31,P2=1e14+67;
+const int BASE1=777,BASE2=4396;
+ll p1[1000001],p2[1000001];
+
+int id(char c)
+{
+    if(isupper(c))
+        return c-'A'+1;
+    else if(islower(c))
+        return c-'a'+27;
+    else
+        return c-'0'+53;
+}
+void init()
+{
+    p1[0]=1;
+    p2[0]=1;
+    for(int i=1; i<=1000000; ++i)
+    {
+        p1[i] = (p1[i-1]*BASE1)%P1;
+        p2[i] = (p2[i-1]*BASE2)%P2;
+    }
+}
 int main()
 {
-    t = 1;
-   // inp(t);
-    while(t--)
+    cin >> n ;
+    init();
+
+    string s,t;
+    while(n--)
     {
-        inp2(n,a);inp2(b,k);
-        f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
+        cin >> t ;
 
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
+        ll hs1=0,hs2=0;
+        ll ht1=0,ht2=0;
+        int len=0;
 
-         printf("%lld\n",ans);
+        for(int i=0; i<s.sz and i<t.sz; ++i)
+        {
+            hs1=(hs1+id(s[s.sz-i-1])*p1[i])%P1;
+            hs2=(hs2+id(s[s.sz-i-1])*p2[i])%P2;
 
+            ht1=(ht1*BASE1+id(t[i]))%P1;
+            ht2=(ht2*BASE2+id(t[i]))%P2;
 
+            if(hs1==ht1&&hs2==ht2)
+            {
+                len = max(len,i+1);
+            }
+        }
+        s += t.substr(len,t.sz-len);
     }
+    cout << s << ln;
+
 }
 
 

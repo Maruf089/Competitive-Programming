@@ -173,37 +173,48 @@ vector<ll>vc;
 map<ll,ll>mp;
 char str[mx];
 
+int construct_lps(string pattern)
+{
+    vector<int>lps(pattern.size());
+    int index = 0;
+    for(int i=1; i<pattern.size();)
+    {
+        if(pattern[i]==pattern[index])
+        {
+            lps[i] = index + 1;
+            index++, i++;
+        }
+        else
+        {
+            if(index!=0)
+                index = lps[index-1];
+            else
+                lps[i] = index, i++;
+        }
+    }
+    return lps[pattern.sz-1];
+}
+
 int main()
 {
-    t = 1;
-   // inp(t);
-    while(t--)
+    inp2(n,m);
+    inps(str);
+    string s = str;
+
+    k = construct_lps(s);
+    string ss ;
+    int idx = 0 ;
+    for(i=k;i<n;i++)
+        ss += s[i];
+
+    cout << s ;
+    m--;
+    while(m)
     {
-        inp2(n,a);inp2(b,k);
-        f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
-
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
-
-         printf("%lld\n",ans);
-
-
+        cout << ss;
+        m--;
     }
+
 }
 
 

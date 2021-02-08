@@ -8,14 +8,9 @@
 using namespace std;
 #define ln '\n'
 #define inp(x) scanf("%lld",&x)
-#define inps(x) scanf("%s",x)
 #define inp2(a,b) scanf("%lld %lld",&a,&b)
-#define No              cout<<"No\n"
-#define Yes             cout<<"Yes\n"
-#define no              cout<<"no\n"
-#define yes             cout<<"yes\n"
-#define NO              cout<<"NO\n"
-#define YES             cout<<"YES\n"
+#define sf scanf
+#define pf printf
 
 #define f0(i,b) for(int i=0;i<(b);i++)
 #define f1(i,b) for(int i=1;i<=(b);i++)
@@ -38,20 +33,77 @@ typedef pair<ll, ll> pll;
 #define fastio  ios_base::sync_with_stdio(false);
 ///Inline functions
 
-inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
-//inline bool isLeapYll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
-inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
-inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
-inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
-inline ll modSub(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); a -= b; normal(a); return a; }
-inline ll modPow(ll b, ll p) { ll r = 1; while(p) { if(p&1) r = modMul(r, b); b = modMul(b, b); p >>= 1; } return r; }
-inline ll modInverse(ll a) { return modPow(a, MOD-2); }
-inline ll modDiv(ll a, ll b) { return modMul(a, modInverse(b)); }
-inline bool isInside(pii p,ll n,ll m){ return (p.first>=0&&p.first<n&&p.second>=0&&p.second<m); }
-inline bool isInside(pii p,ll n){ return (p.first>=0&&p.first<n&&p.second>=0&&p.second<n); }
-inline bool isSquare(ll x){ ll s = sqrt(x);    return (s*s==x); }
-inline bool isFib(ll x) { return isSquare(5*x*x+4)|| isSquare(5*x*x-4); }
-inline bool isPowerOfTwo(ll x){ return ((1LL<<(ll)log2(x))==x); }
+inline bool EQ(double a, double b)
+{
+    return fabs(a-b) < 1e-9;
+}
+//inline bool isLeapYearll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
+inline void normal(ll &a)
+{
+    a %= MOD;
+    (a < 0) && (a += MOD);
+}
+inline ll modMul(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    return (a*b)%MOD;
+}
+inline ll modAdd(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    return (a+b)%MOD;
+}
+inline ll modSub(ll a, ll b)
+{
+    a %= MOD, b %= MOD;
+    normal(a), normal(b);
+    a -= b;
+    normal(a);
+    return a;
+}
+inline ll modPow(ll b, ll p)
+{
+    ll r = 1;
+    while(p)
+    {
+        if(p&1)
+            r = modMul(r, b);
+        b = modMul(b, b);
+        p >>= 1;
+    }
+    return r;
+}
+inline ll modInverse(ll a)
+{
+    return modPow(a, MOD-2);
+}
+inline ll modDiv(ll a, ll b)
+{
+    return modMul(a, modInverse(b));
+}
+inline bool isInside(pii p,ll n,ll m)
+{
+    return (p.first>=0&&p.first<n&&p.second>=0&&p.second<m);
+}
+inline bool isInside(pii p,ll n)
+{
+    return (p.first>=0&&p.first<n&&p.second>=0&&p.second<n);
+}
+inline bool isSquare(ll x)
+{
+    ll s = sqrt(x);
+    return (s*s==x);
+}
+inline bool isFib(ll x)
+{
+    return isSquare(5*x*x+4)|| isSquare(5*x*x-4);
+}
+inline bool isPowerOfTwo(ll x)
+{
+    return ((1LL<<(ll)log2(x))==x);
+}
 
 
 /// DEBUG --------------------------------------------------------------------------------->>>>>>
@@ -129,6 +181,17 @@ void faltu( T arg, const hello &... rest)
 
 /// TEMPLATE ----------------------------------------------------------------------->>>>>>
 
+
+struct func
+{
+//this is a sample overloading function for sorting stl
+    bool operator()(pii const &a, pii const &b)
+    {
+        if(a.F==b.F)
+            return (a.S<b.S);
+        return (a.F<b.F);
+    }
+};
 /*------------------------------Graph Moves----------------------------*/
 //Rotation: S -> E -> N -> W
 //const int fx[] = {0, +1, 0, -1};
@@ -140,7 +203,7 @@ void faltu( T arg, const hello &... rest)
 /*---------------------------------------------------------------------*/
 
 /// Bit Operations
-
+/// count set bit C = (num * 0x200040008001ULL & 0x111111111111111ULL) % 0xf; /// 32 bit integer
 /// inline bool checkBit(ll n, int i) { return n&(1LL<<i); }
 /// inline ll setBit(ll n, int i) { return n|(1LL<<i); }
 /// inline ll resetBit(ll n, int i) { return n&(~(1LL<<i)); }
@@ -148,62 +211,73 @@ void faltu( T arg, const hello &... rest)
 
 /// ************************************** Code starts here ****************************************** */
 
-/*
-// Program showing a policy-based data structure.
-#include <ext/pb_ds/assoc_container.hpp> // Common file
-#include <ext/pb_ds/tree_policy.hpp>
-#include <functional> // for less
-using namespace __gnu_pbds;
-
-// GNU link : https://goo.gl/WVDL6g
-typedef tree<int, null_type, less_equal<int>, rb_tree_tag,
-        tree_order_statistics_node_update>
-        new_data_set;
-// find_by_order(k) – ফাংশনটি kth ordered element এর একটা পয়েন্টার রিটার্ন করে। অর্থাৎ তুমি চাইলেই kth ইন্ডেক্সে কি আছে, সেটা জেনে ফেলতে পারছো!
-// order_of_key(x) – ফাংশনটি x এলিমেন্টটা কোন পজিশনে আছে সেটা বলে দেয়।
-*/
-
 const ll INF = 0x3f3f3f3f3f3f3f3f;
 const long double EPS = 1e-9;
 const int inf = 0x3f3f3f3f;
 const int mx = (int)1e5+9;
 
 ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
+
+vector<int>lps;
+string str,ss;
+void createlps()
+{
+    for(int i = 0; i < str.size(); i++)
+        lps.push_back(0);
+    int index = 0, i = 1;
+
+    for(; i < str.size();)
+    {
+        if(str[i] == str[index])
+        {
+            lps[i] = index+1;
+            i++, index++;
+        }
+        else
+        {
+            if(index != 0)
+            {
+                index = lps[index-1];
+            }
+            else
+            {
+                lps[i] = 0;
+                i++;
+            }
+        }
+    }
+
+}
 
 int main()
 {
-    t = 1;
-   // inp(t);
-    while(t--)
+    cin >> str ;
+    createlps();
+    n = str.sz;
+    if(lps[n-1]==0)
     {
-        inp2(n,a);inp2(b,k);
-        f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
-
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
-
-         printf("%lld\n",ans);
-
-
+        cout << "Just a legend\n";
+        return 0;
     }
+    f0(i,lps[n-1])
+    ss += str[i];
+
+    for(int i=0; i<n-1; i++)
+    {
+        if(lps[i]==lps[n-1])
+        {
+            cout << ss << endl;
+            return 0;
+        }
+    }
+    int p = lps[lps[n-1]-1];
+    if(p)
+    {
+        f0(i,p)
+        cout << str[i];
+        cout << endl;
+        return 0;
+    }
+
+    cout << "Just a legend\n";
 }
-
-

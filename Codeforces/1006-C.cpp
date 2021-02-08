@@ -8,7 +8,6 @@
 using namespace std;
 #define ln '\n'
 #define inp(x) scanf("%lld",&x)
-#define inps(x) scanf("%s",x)
 #define inp2(a,b) scanf("%lld %lld",&a,&b)
 #define No              cout<<"No\n"
 #define Yes             cout<<"Yes\n"
@@ -39,7 +38,7 @@ typedef pair<ll, ll> pll;
 ///Inline functions
 
 inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
-//inline bool isLeapYll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
+//inline bool isLeapYell year) { return (year%400==0) | (year%4==0 && year%100!=0); }
 inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
 inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
 inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
@@ -56,7 +55,7 @@ inline bool isPowerOfTwo(ll x){ return ((1LL<<(ll)log2(x))==x); }
 
 /// DEBUG --------------------------------------------------------------------------------->>>>>>
 
-///**
+/**
 template < typename F, typename S >
 ostream& operator << ( ostream& os, const pair< F, S > & p )
 {
@@ -170,40 +169,36 @@ const int mx = (int)1e5+9;
 
 ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
 vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
+map<ll,ll>mp_pref,index;
 
 int main()
 {
-    t = 1;
-   // inp(t);
-    while(t--)
+    cin >> n ;
+    ll arr[n+9];
+    f1(i,n)
     {
-        inp2(n,a);inp2(b,k);
-        f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
-
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
-
-         printf("%lld\n",ans);
-
-
+        cin >> arr[i];
     }
+    ll pref[n+9] , suff[n+9];
+    pref[0] = 0 ; suff[n+1] = 0 ;
+    f1(i,n)
+    {
+        pref[i] = pref[i-1] + arr[i];
+        mp_pref[pref[i]]++;
+        index[pref[i]] = i;
+    }
+    for(i=n;i>=1;i--)
+        {
+            suff[i] = suff[i+1] + arr[i];
+            if(mp_pref[suff[i]])
+            {
+                int idx = index[suff[i]];
+                if(idx<i)
+                {
+                    ans = max(ans,suff[i]);
+                }
+            }
+        }
+        cout << ans << endl;
 }
-
 

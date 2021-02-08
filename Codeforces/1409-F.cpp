@@ -8,7 +8,6 @@
 using namespace std;
 #define ln '\n'
 #define inp(x) scanf("%lld",&x)
-#define inps(x) scanf("%s",x)
 #define inp2(a,b) scanf("%lld %lld",&a,&b)
 #define No              cout<<"No\n"
 #define Yes             cout<<"Yes\n"
@@ -39,7 +38,7 @@ typedef pair<ll, ll> pll;
 ///Inline functions
 
 inline bool EQ(double a, double b) { return fabs(a-b) < 1e-9; }
-//inline bool isLeapYll year) { return (year%400==0) | (year%4==0 && year%100!=0); }
+//inline bool isLeapYell year) { return (year%400==0) | (year%4==0 && year%100!=0); }
 inline void normal(ll &a) { a %= MOD; (a < 0) && (a += MOD); }
 inline ll modMul(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a*b)%MOD; }
 inline ll modAdd(ll a, ll b) { a %= MOD, b %= MOD; normal(a), normal(b); return (a+b)%MOD; }
@@ -168,42 +167,30 @@ const long double EPS = 1e-9;
 const int inf = 0x3f3f3f3f;
 const int mx = (int)1e5+9;
 
-ll n,m,a,b,t,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
-vector<ll>vc;
-map<ll,ll>mp;
-char str[mx];
+ll n,m,a,b,i,j,d,cs=0,counT=0,k,ans=0,l=0,sum1=0,sum=0,Max,Min,num;
+string s,t;
+ll dp[201][201][201];
+ll solve(ll pos,ll move,ll cnt)
+{
+    if(pos==n)
+        return 0;
+    ll &ret = dp[pos][move][cnt];
+    if(ret!=-1)
+        return ret;
+    /// case 1 pass ( but s[pos] can be t[0],t[1] )
+    ll cnt1 = solve(pos+1,move,cnt+(s[pos]==t[0])) + cnt*(s[pos]==t[1]);
+    /// case 1 make s[pos] into t[0]
+    ll cnt2 = move<k ? solve(pos+1,move+1,cnt+1) + cnt*(t[0]==t[1]) : 0LL;
+    /// case 3 make s[pos] into t[1]
+    ll cnt3 = move<k ? solve(pos+1,move+1,cnt+(t[0]==t[1])) + cnt : 0LL ;
 
+    return ret = max({cnt1,cnt2,cnt3});
+}
 int main()
 {
-    t = 1;
-   // inp(t);
-    while(t--)
-    {
-        inp2(n,a);inp2(b,k);
-        f0(i,n)
-         {
-             inp(num);
-             ll val = num % (a+b);
-             if(val==0)
-                vc.pb( (a+b-1) / a );
-             else if(val<=a) ans++;
-             else vc.pb( (val-1) / a );
-
-         }
-         sort(all(vc));
-         f0(i,vc.sz)
-         {
-             if(vc[i]<=k)
-             {
-                 ans++;
-                 k -= vc[i];
-             }
-         }
-
-         printf("%lld\n",ans);
-
-
-    }
+    cin >> n >> k ;
+    cin >> s >> t ;
+    MEM(dp,-1);
+    cout << solve(0,0,0) << endl;
 }
-
 
